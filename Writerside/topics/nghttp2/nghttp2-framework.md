@@ -1,4 +1,4 @@
-# Framework
+# HTTP2 Framework
 A simple framework for configuring and running a `nghttp2-asio` service.  Uses the
 more powerful [router](https://github.com/sptrakesh/http-router) and delegates all
 registered handlers to run on a separate worker thread pool.  This prevents client

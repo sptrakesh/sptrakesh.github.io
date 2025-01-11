@@ -9,7 +9,7 @@ to suit my purposes (use boost 1.87 for instance).
 > `num_threads` value to greater than `1`.  There is an issue with how the server was
 > initially implemented, which causes crashes when running the `boost::asio::io_context`
 > on multiple-threads.  Use a pool of threads to dispatch requests to offload processing
-> from the server event loop.
+> from the server event loop (see [framework](nghttp2-framework.md)).
 
 ## Build
 Instructions for building the library on popular platforms.
