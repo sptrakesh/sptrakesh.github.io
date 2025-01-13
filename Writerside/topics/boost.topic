@@ -8,6 +8,7 @@
   <snippet id="boost-unix">
     Build <a href="https://boost.org">boost</a> from sources.
     <code-block lang="SHELL" collapsible="true">
+<![CDATA[
 BOOST_VERSION=1.87.0
 INSTALL_DIR=/opt/local
 
@@ -19,12 +20,14 @@ sudo rm -rf $INSTALL_DIR
 cd boost_${ver} \
   &amp;&amp; ./bootstrap.sh \
   &amp;&amp; sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
+]]>
     </code-block>
   </snippet>
 
   <snippet id="boost-macosx">
     Build <a href="https://boost.org">boost</a> from sources.
     <code-block lang="SHELL" collapsible="true">
+<![CDATA[
 BOOST_VERSION=1.87.0
 INSTALL_DIR=/usr/local/boost
 
@@ -36,12 +39,14 @@ sudo rm -rf $INSTALL_DIR
 cd boost_${ver} \
   &amp;&amp; ./bootstrap.sh \
   &amp;&amp; sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
+]]>
     </code-block>
   </snippet>
 
   <snippet id="boost-windows">
     Build <a href="https://boost.org">boost</a> from sources. Download and extract Boost 1.87 (or above) to a temporary location (eg. `\opt\src`). Launch the Visual Studio Command utility and cd to the temporary location.
     <code-block lang="powershell" collapsible="true">
+<![CDATA[
 cd \opt\src
 curl -OL https://boostorg.jfrog.io/artifactory/main/release/1.87.0/source/boost_1_87_0.tar.gz
 tar -xfz boost_1_87_0.tar.gz
@@ -52,6 +57,7 @@ cd boost_1_87_0
 cd ..
 del /s /q boost_1_87_0
 rmdir /s /q boost_1_87_0
+]]>
     </code-block>
   </snippet>
 
