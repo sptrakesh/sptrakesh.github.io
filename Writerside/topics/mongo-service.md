@@ -197,7 +197,7 @@ cd vcpkg
     Check out, build and install the project.
     <code-block lang="PowerShell" collapsible="true">
 <![CDATA[
-cd %homepath%\source\repos
+cd %\homepath%\source\repos
 git clone https://github.com/sptrakesh/mongo-service.git
 cd mongo-service
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=\opt\local -DCMAKE_INSTALL_PREFIX=\opt\spt -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE="C:/opt/src/vcpkg/scripts/buildsystems/vcpkg.cmake" -S . -B build

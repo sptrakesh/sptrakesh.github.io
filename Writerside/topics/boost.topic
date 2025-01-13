@@ -13,7 +13,7 @@ BOOST_VERSION=1.87.0
 INSTALL_DIR=/opt/local
 
 cd /tmp
-ver=`echo "${BOOST_VERSION}" | awk -F'.' '{printf("%d_%d_%d",$1,$2,$3)}'`
+ver=`echo "${BOOST_VERSION}" | awk -F'.' '{printf("%\d_%d_%d",$1,$2,$3)}'`
 curl -OL https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${ver}.tar.bz2
 tar xfj boost_${ver}.tar.bz2
 sudo rm -rf $INSTALL_DIR
@@ -32,7 +32,7 @@ BOOST_VERSION=1.87.0
 INSTALL_DIR=/usr/local/boost
 
 cd /tmp
-ver=`echo "${BOOST_VERSION}" | awk -F'.' '{printf("%d_%d_%d",$1,$2,$3)}'`
+ver=`echo "${BOOST_VERSION}" | awk -F'.' '{printf("%\d_%d_%d",$1,$2,$3)}'`
 curl -OL https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${ver}.tar.bz2
 tar xfj boost_${ver}.tar.bz2
 sudo rm -rf $INSTALL_DIR
