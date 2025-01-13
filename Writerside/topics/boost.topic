@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+    SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       title="Build Boost" id="boost" is-library="true">
+
+  <snippet id="boost-unix">
+    Build <a href="https://boost.org">boost</a> from sources.
+    <code-block lang="SHELL" collapsible="true">
+BOOST_VERSION=1.87.0
+INSTALL_DIR=/opt/local
+
+cd /tmp
+ver=`echo "${BOOST_VERSION}" | awk -F'.' '{printf("%d_%d_%d",$1,$2,$3)}'`
+curl -OL https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${ver}.tar.bz2
+tar xfj boost_${ver}.tar.bz2
+sudo rm -rf $INSTALL_DIR
+cd boost_${ver} \
+  &amp;&amp; ./bootstrap.sh \
+  &amp;&amp; sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
+    </code-block>
+  </snippet>
+
+  <snippet id="boost-macosx">
+    Build <a href="https://boost.org">boost</a> from sources.
+    <code-block lang="SHELL" collapsible="true">
+BOOST_VERSION=1.87.0
+INSTALL_DIR=/usr/local/boost
+
+cd /tmp
+ver=`echo "${BOOST_VERSION}" | awk -F'.' '{printf("%d_%d_%d",$1,$2,$3)}'`
+curl -OL https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_${ver}.tar.bz2
+tar xfj boost_${ver}.tar.bz2
+sudo rm -rf $INSTALL_DIR
+cd boost_${ver} \
+  &amp;&amp; ./bootstrap.sh \
+  &amp;&amp; sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
+    </code-block>
+  </snippet>
+
+  <snippet id="boost-windows">
+    Build <a href="https://boost.org">boost</a> from sources. Download and extract Boost 1.87 (or above) to a temporary location (eg. `\opt\src`). Launch the Visual Studio Command utility and cd to the temporary location.
+    <code-block lang="powershell" collapsible="true">
+cd \opt\src
+curl -OL https://boostorg.jfrog.io/artifactory/main/release/1.87.0/source/boost_1_87_0.tar.gz
+tar -xfz boost_1_87_0.tar.gz
+cd boost_1_87_0
+.\bootstrap.bat
+.\b2 -j8 install threading=multi address-model=64 architecture=arm asynch-exceptions=on --prefix=\opt\local --without-python --without-mpi
+
+cd ..
+del /s /q boost_1_87_0
+rmdir /s /q boost_1_87_0
+    </code-block>
+  </snippet>
+
+</topic>

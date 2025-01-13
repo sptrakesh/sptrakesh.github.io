@@ -6,6 +6,7 @@
                  name="Rakesh Vidyadharan"
                  start-page="introduction.md">
 
+    <toc-element topic="mongo-service.md"/>
     <toc-element topic="introduction.md"/>
     <toc-element topic="nghttp2-asio.md"/>
     <toc-element topic="nghttp2-framework.md"/>

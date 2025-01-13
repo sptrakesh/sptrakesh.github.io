@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic SYSTEM "https://resources.jetbrains.com/writerside/1.0/html-entities.dtd">
+<topic xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" is-library="true" id="build-mongocxx" title="Build mongocxx">
+  <!-- Put your snippets here -->
+  <snippet id="build-mongocxx-unix">
+    <code-block lang="Shell" collapsible="true">
+<![CDATA[
+MONGOC_VERSION=1.29.0
+MONGOCXX_VERSION=4.0.0
+
+sudo rm -rf $PREFIX
+cd /tmp
+sudo rm -rf mongo-c-driver*
+curl -L -O https://github.com/mongodb/mongo-c-driver/releases/download/${MONGOC_VERSION}/mongo-c-driver-${MONGOC_VERSION}.tar.gz
+tar xzf mongo-c-driver-${MONGOC_VERSION}.tar.gz
+cd /tmp/mongo-c-driver-${MONGOC_VERSION}
+mkdir cmake-build && cd cmake-build
+cmake \
+-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=$PREFIX \
+-DCMAKE_INSTALL_LIBDIR=lib \
+-DBUILD_SHARED_LIBS=OFF \
+-DENABLE_SASL=OFF \
+-DENABLE_TESTS=OFF \
+-DENABLE_EXAMPLES=OFF \
+..
+make -j8
+sudo make install
+
+cd /tmp
+sudo rm -rf mongo-cxx-driver
+curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r${MONGOCXX_VERSION}/mongo-cxx-driver-r${MONGOCXX_VERSION}.tar.gz
+tar -xzf mongo-cxx-driver-r${MONGOCXX_VERSION}.tar.gz
+cd mongo-cxx-driver-r${MONGOCXX_VERSION}/build
+cmake \
+-DCMAKE_CXX_STANDARD=20 \
+-DCMAKE_CXX_STANDARD_REQUIRED=ON \
+-DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_PREFIX_PATH=$PREFIX \
+-DCMAKE_INSTALL_PREFIX=$PREFIX \
+-DCMAKE_INSTALL_LIBDIR=lib \
+-DBUILD_SHARED_LIBS=OFF \
+-DCMAKE_TESTING_ENABLED=OFF \
+-DENABLE_TESTS=OFF \
+-DBSONCXX_POLY_USE_STD=ON \
+..
+make -j8
+sudo make install
+]]>
+    </code-block>
+  </snippet>
+
+  <snippet id="build-mongocxx-windows">
+    <code-block lang="PowerShell" collapsible="true">
+cd \opt\src
+curl -OL https://github.com/mongodb/mongo-c-driver/releases/download/1.29.0/mongo-c-driver-1.29.0.tar.gz
+tar -xfz mongo-c-driver-1.29.0.tar.gz
+cd mongo-c-driver-1.29.0
+cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=c:\opt\local -DBUILD_SHARED_LIBS=OFF -DENABLE_SASL=OFF -DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -S . -B cmake-build
+cmake --build cmake-build --target install --parallel 8
+cd ..
+del /s /q mongo-c-driver-1.29.0
+rmdir /s /q mongo-c-driver-1.29.0
+
+curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r4.0.0/mongo-cxx-driver-r4.0.0.tar.gz
+tar -xvf mongo-cxx-driver-r4.0.0.tar.gz
+cd mongo-cxx-driver-r4.0.0
+cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=c:\opt\local -DCMAKE_INSTALL_PREFIX=c:\opt\local -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=OFF -DCMAKE_TESTING_ENABLED=OFF -DENABLE_TESTS=OFF -DBSONCXX_POLY_USE_STD=ON -S . -B build
+cmake --build build --target install --parallel 8
+cd ..
+del /s /q mongo-cxx-driver-r4.0.0
+rmdir /s /q mongo-cxx-driver-r4.0.0
+    </code-block>
+  </snippet>
+</topic>

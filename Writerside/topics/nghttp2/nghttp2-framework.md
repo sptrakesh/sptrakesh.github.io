@@ -1,5 +1,6 @@
 # HTTP2 Framework
-A simple framework for configuring and running a `nghttp2-asio` service.  Uses the
+A simple [framework](https://github.com/sptrakesh/nghttp2-asio/tree/framework)
+for configuring and running a `nghttp2-asio` service.  Uses the
 more powerful [router](https://github.com/sptrakesh/http-router) and delegates all
 registered handlers to run on a separate worker thread pool.  This prevents client
 requests from blocking the main server handling event loop.
@@ -43,36 +44,49 @@ The standard workflow for creating a `server` instance is as follows:
 * Block the main thread until a stop/kill signal is received.
 * Stop the server when a signal is received.
 
-### Example
+### Additional customisation
+A couple of additional extension features are available.
+
+#### Scanner
+A `callback` function can be registered when creating the **Server** instance.  This function
+will be called with the raw data submitted by clients as payload.  The function can scan the
+data and return `false` if it detects any harmful content (tags, scripts, sql, ...).  The
+callback has signature `std::function<bool( std::string_view )>`.
+
+#### Extra Response Processing
+Additional logic can be injected into the response processing workflow by specialising the
+`void extraProcess<Response>( const Request& req, Response& resp, boost::asio::thread_pool& pool )`
+function.  This can be used to execute additional logic before *committing* the response.
+Use to publish metrics, custom logs etc. related to the request/response cycle.
+
 <code-block lang="C++" collapsible="true">
 <![CDATA[
-#include <http2/framework/server.hpp>
-  ...
-  auto conf = spt::http2::framework::Configuration{};
-  conf.port = 8080;
-  conf.origins = std::vector{ "https://dashboard.sptci.com", "https://admin.sptci.com", "https://app.sptci.com" };
-  auto server = spt::http2::framework::Server<Response>{ conf };
-
-  // Add handlers
-  server.addHandler( "GET", "/some/path/{param}", []( const spt::http2::framework::RoutingRequest& rr, const auto& params )
+namespace spt::http2::framework
+{
+  template <>
+  void extraProcess( const Request& req, ptest::Response& resp, boost::asio::thread_pool& pool )
   {
-    auto resp = Response( rr.req.header );
-    resp.headers.emplace( "content-type", "application/json" );
-    resp.body = boost::json::serialize( boost::json::object{
-      { "code", 200 },
-      { "cause", "ok" },
-      { "parameter", params.at( "param" ) }
+    auto str = std::format( "Extra processing for {} to {} using {}.", req.method, req.path, typeid( resp ).name() );
+    boost::asio::post( pool, [str]
+    {
+      ++ptest::counter;
+      LOG_INFO << str;
     } );
-    return resp;
-  } );
-
-  // Add other handlers as appropriate
-  server.start();
-
-  // Run until signal to stop is received
-  auto ioc = boost::asio::io_context{};
-  boost::asio::signal_set signals( ioc, SIGINT, SIGTERM );
-  signals.async_wait( [&server](auto const&, int) { server.stop(); } );
-  ioc.run();
+  }
+}
 ]]>
 </code-block>
+
+### Example
+Simple example server to illustrate full use of the framework.  The attached `CMakeLists.txt`
+file manually links to the framework and `nghttp2_asio`, since I have been unsuccessful
+in getting the configuration for the `nghttp2_asio` library right.
+
+<tabs id="http2-framework-example">
+  <tab title="cmake" id="http2-framework-example-cmake">
+    <code-block lang="CMake" src="nghttp2/asio/CMakeLists.txt" collapsible="true"/>
+  </tab>
+  <tab title="server" id="http2-framework-example-server">
+    <code-block lang="C++" src="nghttp2/asio/server.cpp" collapsible="true"/>
+  </tab>
+</tabs>

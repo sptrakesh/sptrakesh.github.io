@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic SYSTEM "https://resources.jetbrains.com/writerside/1.0/html-entities.dtd">
+<topic xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" is-library="true" id="build-ranges" title="Build ranges">
+  <snippet id="build-fmt-windows">
+    Install <a href="https://github.com/fmtlib/fmt">fmt</a> library.
+    <code-block lang="PowerShell" collapsible="true">
+cd \opt\src
+git clone https://github.com/fmtlib/fmt.git --branch 9.1.0
+cd fmt
+cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\opt\local -DCMAKE_INSTALL_LIBDIR=lib -DFMT_TEST=OFF -DFMT_MODULE=ON -S . -B build
+cmake --build build --target install -j8
+    </code-block>
+  </snippet>
+
+  <snippet id="build-ranges-windows">
+    Install <a href="https://github.com/ericniebler/range-v3">range-v3</a> library.
+    <code-block lang="PowerShell" collapsible="true">
+git clone https://github.com/ericniebler/range-v3.git --branch 0.12.0
+cd range-v3
+cmake -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\opt\local -DCMAKE_INSTALL_LIBDIR=lib -DRANGE_V3_DOCS=OFF -DRANGE_V3_EXAMPLES=OFF -DRANGE_V3_PERF=OFF -DRANGE_V3_TESTS=OFF -DRANGE_V3_INSTALL=ON -B build -S .
+cmake --build build --target install -j8
+    </code-block>
+  </snippet>
+</topic>
