@@ -26,7 +26,7 @@ namespace spt::http2::framework
     /// to the configured handler function, which is run on a worker thread pool.  This is
     /// done to offload processing from the server request handling event loop.  Default is
     /// 2x number of CPU cores.
-    std::size_t numberOfThreads{ 2 * std::thread::hardware_concurrency() };
+    std::size_t numberOfWorkerThreads{ 2 * std::thread::hardware_concurrency() };
 
     /// The maximum size of payload a client can submit to an endpoint.
     uint32_t maxPayloadSize{ 1024 * 1024 };

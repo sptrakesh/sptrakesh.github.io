@@ -23,6 +23,7 @@ requests from blocking the main server handling event loop.
     <code-block lang="C++" src="nghttp2/asio/server.hpp" collapsible="true"/>
   </tab>
   <tab title="Response Example" id="nghttp2-asio-framework-response-sample">
+    Simple `Response` structure that conforms to the `concept` as used in the test suite.
     <code-block lang="C++" src="nghttp2/asio/response.cpp" collapsible="true"/>
   </tab>
 </tabs>
