@@ -1,0 +1,19 @@
+paths:
+  /device/sensor/:
+    $ref: "./paths/sensor.yaml#/root"
+  /device/sensor/count/references/{id}:
+    $ref: "./paths/sensor.yaml#/refcount"
+  /device/sensor/customer/code/{code}:
+    $ref: "./paths/sensor.yaml#/customer"
+  /device/sensor/facility/id/{id}:
+    $ref: "./paths/sensor.yaml#/facility"
+  /device/sensor/history/document/{id}:
+    $ref: "./paths/sensor.yaml#/history/document"
+  /device/sensor/history/summary/{id}:
+    $ref: "./paths/sensor.yaml#/history/summary"
+  /device/sensor/id/{id}:
+    $ref: "./paths/sensor.yaml#/id"
+  /device/sensor/identifier/{identifier}:
+    $ref: "./paths/sensor.yaml#/identifier"
+  /device/sensor/{property}/between/{start}/{end}:
+    $ref: "./paths/sensor.yaml#/between"

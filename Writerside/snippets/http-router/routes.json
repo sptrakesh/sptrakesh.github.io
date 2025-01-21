@@ -1,0 +1,43 @@
+{
+  "paths": [
+    {
+      "path": "/device/sensor/",
+      "methods": ["POST", "GET"]
+    },
+    {
+      "path": "/device/sensor/count/references/{id}",
+      "methods": ["GET"]
+    },
+    {
+      "path": "/device/sensor/customer/code/{code}",
+      "methods": ["GET"]
+    },
+    {
+      "path": "/device/sensor/facility/id/{id}",
+      "methods": ["GET"]
+    },
+    {
+      "path": "/device/sensor/history/document/{id}",
+      "methods": ["GET"]
+    },
+    {
+      "path": "/device/sensor/history/summary/{id}",
+      "methods": ["GET"]
+    },
+    {
+      "path": "/device/sensor/id/{id}",
+      "methods": ["PUT", "GET", "DELETE"]
+    },
+    {
+      "path": "/device/sensor/identifier/{identifier}",
+      "methods": ["GET"]
+    },
+    {
+      "path": "/device/sensor/{property}/between/{start}/{end}",
+      "methods": ["GET"]
+    }
+  ],
+  "total": 9,
+  "static": 1,
+  "dynamic": 8
+}

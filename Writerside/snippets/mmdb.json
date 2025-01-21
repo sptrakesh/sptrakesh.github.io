@@ -1,0 +1,61 @@
+{
+  "city" :
+  {
+    "names" :
+    {
+      "en" : "Oklahoma City (Central Oklahoma City)"
+    }
+  },
+  "continent" :
+  {
+    "code" : "NA",
+    "geoname_id" : 6255149,
+    "names" :
+    {
+      "de" : "Nordamerika",
+      "en" : "North America",
+      "es" : "Norteamérica",
+      "fa" : " امریکای شمالی",
+      "fr" : "Amérique Du Nord",
+      "ja" : "北アメリカ大陸",
+      "ko" : "북아메리카",
+      "pt-BR" : "América Do Norte",
+      "ru" : "Северная Америка",
+      "zh-CN" : "北美洲"
+    }
+  },
+  "country" :
+  {
+    "geoname_id" : 6252001,
+    "is_in_european_union" : false,
+    "iso_code" : "US",
+    "names" :
+    {
+      "de" : "Vereinigte Staaten von Amerika",
+      "en" : "United States",
+      "es" : "Estados Unidos de América (los)",
+      "fa" : "ایالات متحدهٔ امریکا",
+      "fr" : "États-Unis",
+      "ja" : "アメリカ合衆国",
+      "ko" : "미국",
+      "pt-BR" : "Estados Unidos",
+      "ru" : "США",
+      "zh-CN" : "美国"
+    }
+  },
+  "location" :
+  {
+    "latitude" : 35.5248,
+    "longitude" : -97.5971
+  },
+  "subdivisions" :
+  [
+
+    {
+      "names" :
+      {
+        "en" : "Oklahoma"
+      }
+    }
+  ]
+}

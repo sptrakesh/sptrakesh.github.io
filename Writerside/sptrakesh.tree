@@ -13,7 +13,12 @@
         <toc-element topic="mongo-service-build.md"/>
         <toc-element topic="mongo-service-metrics.md"/>
     </toc-element>
+    <toc-element topic="http-router.md">
+        <toc-element topic="http-router-use.md"/>
+    </toc-element>
     <toc-element topic="nghttp2-asio.md">
         <toc-element topic="nghttp2-framework.md"/>
     </toc-element>
+    <toc-element topic="s3-proxy.md"/>
+    <toc-element topic="mmdb.md"/>
 </instance-profile>
