@@ -8,7 +8,23 @@
 
     <toc-element topic="introduction.md"/>
     <toc-element topic="mongo-service.md">
-        <toc-element topic="mongo-service-models.md"/>
+        <toc-element topic="mongo-service-models.md">
+            <toc-element topic="mongo-service-models-create.md"/>
+            <toc-element topic="mongo-service-models-create-timeseries.md"/>
+            <toc-element topic="mongo-service-models-retrieve.md"/>
+            <toc-element topic="mongo-service-models-count.md"/>
+            <toc-element topic="mongo-service-models-distinct.md"/>
+            <toc-element topic="mongo-service-models-update.md"/>
+            <toc-element topic="mongo-service-models-delete.md"/>
+            <toc-element topic="mongo-service-models-bulk-write.md"/>
+            <toc-element topic="mongo-service-models-transaction.md"/>
+            <toc-element topic="mongo-service-models-aggregation-pipeline.md"/>
+            <toc-element topic="mongo-service-models-create-index.md"/>
+            <toc-element topic="mongo-service-models-drop-index.md"/>
+            <toc-element topic="mongo-service-models-create-collection.md"/>
+            <toc-element topic="mongo-service-models-rename-collection.md"/>
+            <toc-element topic="mongo-service-models-drop-collection.md"/>
+        </toc-element>
         <toc-element topic="mongo-service-serialisation.md"/>
         <toc-element topic="mongo-service-build.md"/>
         <toc-element topic="mongo-service-metrics.md"/>
@@ -19,6 +35,7 @@
     </toc-element>
     <toc-element topic="nghttp2-asio.md">
         <toc-element topic="nghttp2-framework.md"/>
+        <toc-element topic="rest-api-framework.md"/>
     </toc-element>
     <toc-element topic="geocode.md"/>
     <toc-element topic="s3-proxy.md"/>
