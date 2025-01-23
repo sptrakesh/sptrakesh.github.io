@@ -40,4 +40,5 @@
     <toc-element topic="geocode.md"/>
     <toc-element topic="s3-proxy.md"/>
     <toc-element topic="mmdb.md"/>
+    <toc-element topic="clustered-mqtt-broker.md"/>
 </instance-profile>

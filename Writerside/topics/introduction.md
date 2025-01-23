@@ -16,3 +16,4 @@ being used at companies I work for or worked for in the past.
 
 ## Articles
 * [REST API Framework](rest-api-framework.md)
+* [Clustered MQTT Broker](clustered-mqtt-broker.md)
