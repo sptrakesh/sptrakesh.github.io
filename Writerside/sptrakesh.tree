@@ -41,4 +41,5 @@
     <toc-element topic="s3-proxy.md"/>
     <toc-element topic="mmdb.md"/>
     <toc-element topic="clustered-mqtt-broker.md"/>
+  <toc-element topic="High-Performance-IoT-Service.md"/>
 </instance-profile>
