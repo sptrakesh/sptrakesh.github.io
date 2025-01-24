@@ -3,6 +3,8 @@
 Documentation around my personal projects and work.  Most of my recent projects are actively
 being used at companies I work for or worked for in the past.
 
+View/download my [resume](https://github.com/sptrakesh/sptrakesh.github.io/blob/main/Writerside/images/resume.pdf)
+
 ## Active Projects
 * [config-db](https://github.com/sptrakesh/config-db) Simple multi-master configuration database.
 * [mongo-service](https://github.com/sptrakesh/mongo-service) Proxy [service](mongo-service.md) for accessing MongoDB.
