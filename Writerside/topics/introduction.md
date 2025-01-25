@@ -17,6 +17,4 @@ View/download my [resume](https://github.com/sptrakesh/sptrakesh.github.io/blob/
   operations I have used on a few projects for companies I worked for.
 
 ## Articles
-* [REST API Framework](rest-api-framework.md)
-* [Clustered MQTT Broker](clustered-mqtt-broker.md)
-* [High Performance IoT Service](High-Performance-IoT-Service.md)
+<include from="Articles.md" element-id="article-links"/>
