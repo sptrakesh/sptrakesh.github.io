@@ -1,6 +1,6 @@
 # Articles
 
-Links to articles I wrote around interesting work I was performed for my clients.
+Links to articles I wrote around interesting work I performed for my clients.
 
 <snippet id="article-links">
 <ul>
@@ -8,5 +8,6 @@ Links to articles I wrote around interesting work I was performed for my clients
   <li><a href="clustered-mqtt-broker.md">Clustered MQTT Broker</a></li>
   <li><a href="High-Performance-IoT-Service.md">High Performance IoT Service</a></li>
   <li><a href="Boost-Beast-Metrics.md">Boost Beast Metrics</a></li>
+  <li><a href="Goblin-HTML-Reporter.md">Goblin HTML Reporter</a></li>
 </ul>
 </snippet>
