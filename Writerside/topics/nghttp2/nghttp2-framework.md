@@ -78,6 +78,16 @@ namespace spt::http2::framework
 ]]>
 </code-block>
 
+### Header Only
+The library can be used *header only* is so desired.  Implement the `statusMessage` and
+`cors` functions are desired.  The [s3-proxy](s3-proxy.md) server uses this model and does
+not link to the framework library.
+
+```C++
+std::string_view spt::http2::framework::statusMessage( uint16_t status );
+void spt::http2::framework::cors( const nghttp2::asio_http2::server::request& req, const nghttp2::asio_http2::server::response& res, const Configuration& configuration );
+```
+
 ### Example
 Simple example server to illustrate full use of the framework.  The attached `CMakeLists.txt`
 file manually links to the framework and `nghttp2_asio`, since I have been unsuccessful
