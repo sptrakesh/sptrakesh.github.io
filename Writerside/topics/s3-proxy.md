@@ -1,13 +1,25 @@
 # S3 Proxy
 A simple proxy server for serving contents of an AWS S3 bucket as a static website.
 Useful in cases where it is not feasible to use traditional CloudFront distribution
-or similar CDN on top of a bucket. The server is implemented using 
-[HTTP2 Framework](nghttp2-framework.md).
+or similar CDN on top of a bucket.
 
 In particular, it is possible to serve static content from a private S3 bucket.
 
+## Implementation
+The server is implemented using the [HTTP2 Framework](nghttp2-framework.md).
+
+A local cache of the underlying **S3** files is maintained to avoid repeated fetches from
+**S3**. The local storage location can be controlled via the `--cache-dir` option when
+starting the server.  A **TTL** value is set on the cached files.  The duration can be
+controlled via the `--ttl` option.
+
+### Clearing Cache
+The cached versions of the files from **S3** can be cleared by making a `DELETE` request
+to the `/_proxy/_private/_cache/clear` path.  The request **must** include a *Bearer*
+*authorization* header, and the token **must** match the configured `--auth-key` value.
+
 ## Configuration
-The server can be configured with the following options:
+The server can be configured through the following command line options:
 * `--auth-key` - A `bearer token` value to use to access internal management
   API endpoints.
   * At present the only management endpoint is `/_proxy/_private/_cache/clear`
@@ -17,7 +29,7 @@ The server can be configured with the following options:
 * `--region` - The *AWS Region* in which the `bucket` exists.
 * `--bucket` - The target *AWS S3 Bucket* from which objects are retrieved.
 * `--port` - The *port* on which the server listens.  Default `8000`.
-* `--threads` - Number of I/O threads for the server.  Defaults to `std::thread::hardware_concurrency`.
+* `--threads` - Number of worker threads for the server.  Defaults to `std::thread::hardware_concurrency`.
 * `--ttl` - Cache expiry TTL in seconds.  Default `300`.  All S3 objects are
   cached for efficiency.
 * `--cache-dir` - The directory under which cached S3 objects are stored.

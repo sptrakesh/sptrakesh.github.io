@@ -79,7 +79,7 @@ namespace spt::http2::framework
 </code-block>
 
 ### Header Only
-The library can be used *header only* is so desired.  Implement the `statusMessage` and
+The library can be used *header only* if so desired.  Implement the `statusMessage` and
 `cors` functions are desired.  The [s3-proxy](s3-proxy.md) server uses this model and does
 not link to the framework library.
 
