@@ -12,7 +12,7 @@ namespace spt::http2::framework
 {
   struct Configuration
   {
-    /// The HTTP method/verb's that are to be sent back in a OPTIONS response.
+    /// The HTTP method/verb's that are to be sent back in a OPTIONS response.  Customise as appropriate.
     std::vector<std::string> corsMethods{ "DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT" };
 
     /// The origins supported by this server instance.
@@ -28,7 +28,8 @@ namespace spt::http2::framework
     /// 2x number of CPU cores.
     std::size_t numberOfWorkerThreads{ 2 * std::thread::hardware_concurrency() };
 
-    /// The maximum size of payload a client can submit to an endpoint.
+    /// The maximum size of payload a client can submit to an endpoint.  If payload exceeds
+    /// this size, server will respond with a `413` status.
     uint32_t maxPayloadSize{ 1024 * 1024 };
 
     /// The maximum length of the queue of pending incoming connections at the socket level.

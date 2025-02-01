@@ -13,6 +13,8 @@
 
 #include <boost/asio/thread_pool.hpp>
 #include <boost/pfr/core_name.hpp>
+#include <fmt/format.h>
+#include <fmt/ranges.h>
 
 namespace spt::http2::framework
 {
@@ -73,14 +75,14 @@ namespace spt::http2::framework
      * expects only text data (JSON, YAML, ...) being submitted to endpoints.
      * @param config The server configuration object.
      */
-    explicit Server( const Configuration& config ) : configuration{ config }, pool{ config.numberOfThreads } { init(); }
+    explicit Server( const Configuration& config ) : configuration{ config }, pool{ config.numberOfWorkerThreads } { init(); }
 
     /// A call back function used to scan any data submitted to the service.  Implement desired logic such
     /// as scanning for tags, scripts, invalid characters ... as appropriate.
-    using Scanner = std::function<bool( const std::string& )>;
+    using Scanner = std::function<bool( std::string_view )>;
 
     /**
-     * Create a server instance using specified configuration and input sanitisation function.  Sanitisation
+     * Create a server instance using specified configuration and input scanner function.  Scanner
      * function should _validate_ the input data and either _approve_ or _reject_ the content. Server implementation
      * expects only text data (JSON, YAML, ...) being submitted to endpoints.  Server will send a `400` response
      * if the function returns `false`.
@@ -89,7 +91,7 @@ namespace spt::http2::framework
      *   returns `false`, a `413` response is sent to client.
      */
     explicit Server( const Configuration& config, Scanner&& scanner ) :
-        configuration{ config }, pool{ config.numberOfThreads }, scanner{ std::move( scanner ) }
+        configuration{ config }, pool{ config.numberOfWorkerThreads }, scanner{ std::move( scanner ) }
     {
       init();
     }
@@ -119,7 +121,7 @@ namespace spt::http2::framework
       auto obj = boost::json::object{};
       boost::pfr::for_each_field_with_name( configuration, [&obj](std::string_view name, const auto& value)
       {
-        obj.emplace( name, std::format( "{}", value ) );
+        obj.emplace( name, fmt::format( "{}", value ) );
       } );
       LOG_INFO << boost::json::serialize( obj );
 #endif
@@ -163,11 +165,15 @@ namespace spt::http2::framework
     {
       auto body = std::make_shared<std::string>();
 
-      const auto error = [this, &res]( uint16_t code, std::string_view msg )
+      const auto error = []( uint16_t code, std::string_view msg, const nghttp2::asio_http2::server::response& res )
       {
-        res.write_head( code, { { "content-type", { "application/json", false } } } );
+        res.write_head( code, { { "content-type", { "application/json; charset=utf-8", false } } } );
         res.end( boost::json::serialize( boost::json::object{ { "code", code }, { "cause", msg } } ) );
       };
+
+      auto [pathMatches, methodMatches] = router.canRoute( req.method(), req.uri().path );
+      if ( !pathMatches ) return error( 404, "Not Found", res );
+      if ( !methodMatches ) return error( 405, "Method Not Allowed", res );
 
       auto iter = req.header().find( "content-length"s );
       if ( iter == req.header().end() ) iter = req.header().find( "Content-Length"s );
@@ -181,7 +187,7 @@ namespace spt::http2::framework
         auto [ptr, ec] { std::from_chars( iter->second.value.data(), iter->second.value.data() + iter->second.value.size(), length ) };
         if ( ec == std::errc() )
         {
-          if ( length > configuration.maxPayloadSize ) return error( 413, "Payload Too Large" );
+          if ( length > configuration.maxPayloadSize ) return error( 413, "Payload Too Large", res );
           body->reserve( length );
         }
         else
@@ -201,7 +207,9 @@ namespace spt::http2::framework
           return;
         }
 
-        if ( body->size() > configuration.maxPayloadSize ) return error( 413, "Payload Too Large" );
+        if ( body->size() > configuration.maxPayloadSize ) return error( 413, "Payload Too Large", res );
+
+        if ( scanner && !scanner( *body ) ) return error( 400, "Prohibited input", res );
 
         auto stream = std::make_shared<Stream<Resp>>( req, res, router, body );
         res.on_close( [stream]([[maybe_unused]] uint32_t errorCode)
@@ -211,8 +219,6 @@ namespace spt::http2::framework
 #endif
           stream->close( true );
         } );
-
-        if ( scanner && !scanner( *body ) ) return error( 400, "Prohibited input" );
 
         boost::asio::post( pool, [stream, this]{ stream->process( pool, configuration ); } );
       });
