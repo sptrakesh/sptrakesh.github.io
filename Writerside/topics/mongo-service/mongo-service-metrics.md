@@ -1,4 +1,4 @@
-# Mongo Service Metrics
+# Metrics
 Metrics are collected for all requests to the service (unless client specifies `skipMetric`).  Metrics may be
 stored in MongoDB itself, or a service that supports the [ILP](https://docs.influxdata.com/influxdb/v2.7/reference/syntax/line-protocol/).
 

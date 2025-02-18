@@ -5,11 +5,9 @@ no longer being maintained (see list of pull requests that have been pending sin
 have merged all the outstanding PR's as well as made some changes (breaking) to the interfaces
 to suit my purposes (use boost 1.87 for instance).
 
-> When configuring the `nghttp2::asio_http2::server::http` instance, do not set the
-> `num_threads` value to greater than `1`.  There is an issue with how the server was
-> initially implemented, which causes crashes when running the `boost::asio::io_context`
-> on multiple-threads.  Use a pool of threads to dispatch requests to offload processing
-> from the server event loop (see [framework](nghttp2-framework.md)).
+In particular, the pool of `boost::asio::io_context` instances have been replaced with the
+standard model of using a single `io_context` instance that is *run* on the desired number of
+threads.  To ensure thread-safety, a *strand* per connection approach is adopted.
 
 ## Build
 Instructions for building the library on popular platforms.
@@ -18,22 +16,9 @@ Instructions for building the library on popular platforms.
 Install dependencies to build the project.
 
 #### Boost {collapsible="true" id="nghttp2::macosx::boost"}
-* Download and extract Boost 1.86 (or above) to a temporary location (eg. \opt\src).
-* Launch the Visual Studio Command utility and cd to the temporary location.
+<include from="boost.topic" element-id="boost-macosx"/>
 
-```shell
-cd /tmp
-curl -OL https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.bz2
-tar xfj boost_1_87_0.tar.gz
-cd boost_1_87_0
-./bootstrap.bat
-./b2 -j8 install threading=multi address-model=64 architecture=arm asynch-exceptions=on --prefix=/usr/local/boost --without-python --without-mpi
-
-cd ..
-rm -rf boost_1_87_0*
-```
-
-#### libnghttp2 {collapsible="true" id="nghttp2::macosx::lib"}
+#### libnghttp2 {collapsible="false" id="nghttp2::macosx::lib"}
 ```shell
 brew install -y libnghttp2
 ```

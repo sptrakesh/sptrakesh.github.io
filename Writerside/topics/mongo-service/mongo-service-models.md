@@ -1,4 +1,4 @@
-# Mongo Service Models
+# Models
 Model structures for making the various types of requests, and receiving the expected
 responses are also provided.  Request and response structures accept user define data
 models subject to some constraints.  See the model [unit test](https://github.com/sptrakesh/mongo-service/blob/master/test/unit/document.cpp)

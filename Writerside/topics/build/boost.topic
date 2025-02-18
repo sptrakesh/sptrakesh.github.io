@@ -18,8 +18,8 @@ curl -OL https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/sou
 tar xfj boost_${ver}.tar.bz2
 sudo rm -rf $INSTALL_DIR
 cd boost_${ver} \
-  &amp;&amp; ./bootstrap.sh \
-  &amp;&amp; sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
+  && ./bootstrap.sh \
+  && sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
 ]]>
     </code-block>
   </snippet>
@@ -37,8 +37,8 @@ curl -OL https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/sou
 tar xfj boost_${ver}.tar.bz2
 sudo rm -rf $INSTALL_DIR
 cd boost_${ver} \
-  &amp;&amp; ./bootstrap.sh \
-  &amp;&amp; sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
+  && ./bootstrap.sh \
+  && sudo ./b2 -j8 cxxflags=-std=c++20 install link=static threading=multi runtime-link=static --prefix=$INSTALL_DIR --without-python --without-mpi
 ]]>
     </code-block>
   </snippet>
