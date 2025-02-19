@@ -6,7 +6,7 @@
                  name="Rakesh Vidyadharan"
                  start-page="introduction.md">
 
-    <toc-element topic="introduction.md"/>
+  <toc-element topic="introduction.md"/>
   <toc-element topic="Config-Db.md">
     <toc-element topic="Config-Db-Protocol.md"/>
     <toc-element topic="Config-Db-Utilities.md"/>
@@ -45,9 +45,10 @@
         <toc-element topic="rest-api-framework.md"/>
     </toc-element>
     <toc-element topic="geocode.md"/>
-    <toc-element topic="s3-proxy.md"/>
+  <toc-element topic="OpenAPI-to-LaTeX.md"/>
+  <toc-element topic="s3-proxy.md"/>
     <toc-element topic="mmdb.md"/>
-    <toc-element topic="Articles.md">
+  <toc-element topic="Articles.md">
         <toc-element topic="clustered-mqtt-broker.md"/>
         <toc-element topic="High-Performance-IoT-Service.md"/>
         <toc-element topic="Boost-Beast-Metrics.md"/>
