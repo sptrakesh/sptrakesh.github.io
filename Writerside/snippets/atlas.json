@@ -1,0 +1,61 @@
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "date": {
+        "type": "date"
+      },
+      "entity": {
+        "fields": {
+          "customer": {
+            "fields": {
+              "code": {
+                "analyzer": "lucene.keyword",
+                "searchAnalyzer": "lucene.keyword",
+                "type": "string"
+              }
+            },
+            "type": "document"
+          },
+          "metadata": {
+            "fields": {
+              "created": {
+                "type": "date"
+              },
+              "modified": {
+                "type": "date"
+              }
+            },
+            "type": "document"
+          }
+        },
+        "type": "document"
+      },
+      "length": {
+        "type": "number"
+      },
+      "location": {
+        "type": "geo"
+      },
+      "type": {
+        "analyzer": "lucene.keyword",
+        "searchAnalyzer": "lucene.keyword",
+        "type": "string"
+      },
+      "usernames": {
+        "analyzer": "lucene.keyword",
+        "searchAnalyzer": "lucene.keyword",
+        "type": "string"
+      },
+      "values": {
+        "type": "string"
+      }
+    }
+  },
+  "storedSource": {
+    "include": [
+      "entity",
+      "type"
+    ]
+  }
+}

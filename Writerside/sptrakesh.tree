@@ -49,7 +49,8 @@
   <toc-element topic="s3-proxy.md"/>
     <toc-element topic="mmdb.md"/>
   <toc-element topic="Articles.md">
-        <toc-element topic="clustered-mqtt-broker.md"/>
+    <toc-element topic="Atlas-Search.md"/>
+    <toc-element topic="clustered-mqtt-broker.md"/>
         <toc-element topic="High-Performance-IoT-Service.md"/>
         <toc-element topic="Boost-Beast-Metrics.md"/>
       <toc-element topic="Goblin-HTML-Reporter.md"/>
