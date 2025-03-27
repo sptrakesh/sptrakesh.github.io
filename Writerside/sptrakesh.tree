@@ -56,4 +56,5 @@
       <toc-element topic="Goblin-HTML-Reporter.md"/>
       <toc-element topic="Daily-Rolling-Logger.md"/>
     </toc-element>
+    <toc-element topic="Application-Performance-Management.md"/>
 </instance-profile>

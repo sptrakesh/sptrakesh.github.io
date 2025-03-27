@@ -45,6 +45,11 @@ The standard workflow for creating a `server` instance is as follows:
 * Block the main thread until a stop/kill signal is received.
 * Stop the server when a signal is received.
 
+**Note:** If using the framework to implement a *static file server*, note that using the
+`nghttp2-asio::file_generator_cb` pushes blocking file IO operation to the server thread(s).
+For better concurrency, it is advisable to read the file into the response body in the
+worker thread.
+
 ### Additional customisation
 A couple of additional extension features are available.
 
@@ -80,12 +85,14 @@ namespace spt::http2::framework
 
 ### Header Only
 The library can be used *header only* if so desired.  Implement the `statusMessage` and
-`cors` functions are desired.  The [s3-proxy](s3-proxy.md) server uses this model and does
-not link to the framework library.
+`cors`, etc. functions are desired.  The [s3-proxy](s3-proxy.md) server uses this model
+and does not link to the framework library.
 
 ```C++
 std::string_view spt::http2::framework::statusMessage( uint16_t status );
 void spt::http2::framework::cors( const nghttp2::asio_http2::server::request& req, const nghttp2::asio_http2::server::response& res, const Configuration& configuration );
+bool spt::http2::framework::shouldCompress( const Request& req );
+std::string spt::http2::framework::ipaddress( const Request& req )
 ```
 
 ### Example

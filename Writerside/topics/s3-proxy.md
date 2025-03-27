@@ -86,6 +86,10 @@ THe following environment variables may be used to specify additional configurat
 proxy server.
 * `ALLOWED_ORIGINS` - JSON array of origins supported for sending CORS headers.  Also set this when
   running as a *docker container*.
+* `SINGLE_THREADED` - If set to `true`, the `--threads` value will be used to configure the 
+  number or worker threads, while the server will be run on a single thread.  Single server
+  thread model should work for most use cases, unless the service is expected to handle
+  very high concurrency.
 
 ```Shell
 ALLOWED_ORIGINS='["http://127.0.0.1:8080", "http://localhost:8080", "http://local.sptci.com:8080"]' <path to>/s3proxy [options]

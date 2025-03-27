@@ -4,6 +4,7 @@ Links to articles I wrote around interesting work I performed for my clients.
 
 <snippet id="article-links">
 <ul>
+  <li><a href="Application-Performance-Management.md">Application Performance Management (APM)</a></li>
   <li><a href="Atlas-Search.md">Atlas Search</a></li>
   <li><a href="rest-api-framework.md">REST API Framework</a></li>
   <li><a href="clustered-mqtt-broker.md">Clustered MQTT Broker</a></li>
