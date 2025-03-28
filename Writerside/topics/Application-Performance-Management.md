@@ -54,7 +54,7 @@ capture APM data at the desired level of verbosity.  There is obviously a trade-
 in terms of the effort required to instrument source code, as well as the performance
 degradation involved in capturing APM data.  Another big side effect of instrumenting
 source code is that the code base becomes littered with all the APM instrumentation
-instructions.
+instructions (macros despite being discouraged help a lot to reduce clutter).
 
 <tabs id="apm-instrument">
   <tab title="HTTP" id="apm-instrument-template">
