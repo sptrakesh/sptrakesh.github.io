@@ -1,0 +1,646 @@
+{
+  "_id": {
+    "$oid": "67e721c2af679fd3e60d1007"
+  },
+  "application": "inventory-api",
+  "timestamp": {
+    "$numberLong": "390037115100666"
+  },
+  "duration": {
+    "$numberLong": "5016042"
+  },
+  "tags": {
+    "action": "retrieve",
+    "customer": "int-test",
+    "entity": "InventoryItemTransaction",
+    "host": "rakesh-mbp.local",
+    "request_method": "POST",
+    "response_compressed": "true",
+    "response_status": "200",
+    "role": "admin"
+  },
+  "values": {
+    "ipaddress": "127.0.0.1",
+    "request_path": "/inventory/item/transaction/",
+    "response_size": {
+      "$numberLong": "235"
+    },
+    "username": "test"
+  },
+  "processes": [
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115100791"
+      },
+      "duration": {
+        "$numberLong": "5000917"
+      },
+      "values": {
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/impl/inventoryitemtransaction.cpp",
+        "function": "auto wirepulse::http::addInventoryItemTransactionRoutes(spt::http2::framework::Server<Response> &)::(anonymous class)::operator()(const RoutingRequest &, auto &&) const [auto:1 = boost::container::flat_map<std::string_view, std::string_view>]",
+        "line": {
+          "$numberLong": "85"
+        }
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115104416"
+      },
+      "duration": {
+        "$numberLong": "4992375"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/impl/inventoryitemtransaction.cpp",
+        "caller_function": "auto wirepulse::http::addInventoryItemTransactionRoutes(spt::http2::framework::Server<Response> &)::(anonymous class)::operator()(const RoutingRequest &, auto &&) const [auto:1 = boost::container::flat_map<std::string_view, std::string_view>]",
+        "caller_line": {
+          "$numberLong": "87"
+        },
+        "entity_id": "67e721c2af679fd3e60d1008",
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "line": {
+          "$numberLong": "53"
+        },
+        "note": "Create entity InventoryItemTransaction"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115110041"
+      },
+      "duration": {
+        "$numberLong": "625750"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "caller_function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "caller_line": {
+          "$numberLong": "67"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/impl/common.cpp",
+        "function": "AuthResponse wirepulse::http::authorise(const spt::http2::framework::Request &, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "87"
+        }
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115119291"
+      },
+      "duration": {
+        "$numberLong": "611750"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/impl/common.cpp",
+        "caller_function": "AuthResponse wirepulse::http::authorise(const spt::http2::framework::Request &, spt::ilp::APMRecord &)",
+        "caller_line": {
+          "$numberLong": "107"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/storage.cpp",
+        "function": "model::JwtToken::Ptr wirepulse::db::validateToken(std::string_view, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "65"
+        }
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115120833"
+      },
+      "duration": {
+        "$numberLong": "605833"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/storage.cpp",
+        "caller_function": "model::JwtToken::Ptr wirepulse::db::validateToken(std::string_view, spt::ilp::APMRecord &)",
+        "caller_line": {
+          "$numberLong": "72"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/impl/tokenrepository.cpp",
+        "function": "model::JwtToken::Ptr wirepulse::db::impl::token(std::string_view, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "159"
+        },
+        "note": "Retrieve token"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115149166"
+      },
+      "duration": {
+        "$numberLong": "572167"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/impl/tokenrepository.cpp",
+        "caller_function": "model::JwtToken::Ptr wirepulse::db::impl::token(std::string_view, spt::ilp::APMRecord &)",
+        "caller_line": {
+          "$numberLong": "171"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/impl/tokenrepository.cpp",
+        "function": "std::optional<bsoncxx::oid> (anonymous namespace)::ptoken::jwtToken(const model::JwtToken &, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "101"
+        },
+        "note": "Retrieve JWT token"
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037115152125"
+      },
+      "duration": {
+        "$numberLong": "567708"
+      },
+      "tags": {
+        "process": "Retrieve data"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/impl/tokenrepository.cpp",
+        "caller_function": "std::optional<bsoncxx::oid> (anonymous namespace)::ptoken::jwtToken(const model::JwtToken &, spt::ilp::APMRecord &)",
+        "caller_line": {
+          "$numberLong": "114"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/impl/tokenrepository.cpp",
+        "function": "std::optional<bsoncxx::oid> (anonymous namespace)::ptoken::jwtToken(const model::JwtToken &, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "113"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037115741791"
+      },
+      "duration": {
+        "$numberLong": "38334"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "caller_function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "caller_line": {
+          "$numberLong": "82"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "line": {
+          "$numberLong": "80"
+        },
+        "note": "Parse JSON payload"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115780625"
+      },
+      "duration": {
+        "$numberLong": "3045958"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "caller_function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "caller_line": {
+          "$numberLong": "94"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/inventoryitemtransaction.cpp",
+        "function": "Tuple wirepulse::validate::validate(model::InventoryItemTransaction &, const model::JwtToken &, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "19"
+        },
+        "note": "validate inventory item transaction"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115784416"
+      },
+      "duration": {
+        "$numberLong": "2110917"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/inventoryitemtransaction.cpp",
+        "caller_function": "Tuple wirepulse::validate::validate(model::InventoryItemTransaction &, const model::JwtToken &, spt::ilp::APMRecord &)",
+        "caller_line": {
+          "$numberLong": "45"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/validate.hpp",
+        "function": "std::expected<std::optional<M>, Tuple> wirepulse::validate::impl::validate(M &, const model::JwtToken &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "44"
+        },
+        "note": "validate entity"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115787916"
+      },
+      "duration": {
+        "$numberLong": "487250"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/validate.hpp",
+        "caller_function": "std::expected<std::optional<M>, Tuple> wirepulse::validate::impl::validate(M &, const model::JwtToken &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "48"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/user.cpp",
+        "function": "std::expected<wirepulse::model::User, std::tuple<int16_t, std::string>> wirepulse::validate::impl::user(const model::JwtToken &, spt::ilp::APMRecord &)",
+        "line": {
+          "$numberLong": "16"
+        },
+        "note": "validate user"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037115791625"
+      },
+      "duration": {
+        "$numberLong": "482625"
+      },
+      "values": {
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::User, ValueType = std::string]",
+        "line": {
+          "$numberLong": "544"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037115793541"
+      },
+      "duration": {
+        "$numberLong": "477375"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::User, ValueType = std::string]",
+        "caller_line": {
+          "$numberLong": "570"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::User, ValueType = std::string]",
+        "line": {
+          "$numberLong": "568"
+        },
+        "process": "retrieve data"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037116281666"
+      },
+      "duration": {
+        "$numberLong": "652375"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/validate.hpp",
+        "caller_function": "std::expected<std::optional<M>, Tuple> wirepulse::validate::impl::validate(M &, const model::JwtToken &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "58"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/customer.hpp",
+        "function": "std::expected<model::Customer, std::tuple<int16_t, std::string>> wirepulse::validate::impl::customer(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "29"
+        },
+        "note": "validate customer"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037116285166"
+      },
+      "duration": {
+        "$numberLong": "630334"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/customer.hpp",
+        "caller_function": "std::expected<model::Customer, std::tuple<int16_t, std::string>> wirepulse::validate::impl::customer(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "33"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::Customer, ValueType = std::string]",
+        "line": {
+          "$numberLong": "544"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037116287500"
+      },
+      "duration": {
+        "$numberLong": "625416"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::Customer, ValueType = std::string]",
+        "caller_line": {
+          "$numberLong": "570"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::Customer, ValueType = std::string]",
+        "line": {
+          "$numberLong": "568"
+        },
+        "process": "retrieve data"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037116938833"
+      },
+      "duration": {
+        "$numberLong": "949875"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/validate.hpp",
+        "caller_function": "std::expected<std::optional<M>, Tuple> wirepulse::validate::impl::validate(M &, const model::JwtToken &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "69"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/facility.hpp",
+        "function": "std::expected<std::optional<model::Facility>, std::tuple<int16_t, std::string>> wirepulse::validate::impl::facility(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "29"
+        },
+        "note": "validate facility"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037116941750"
+      },
+      "duration": {
+        "$numberLong": "632833"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/facility.hpp",
+        "caller_function": "std::expected<std::optional<model::Facility>, std::tuple<int16_t, std::string>> wirepulse::validate::impl::facility(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "35"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/customer.hpp",
+        "function": "std::expected<model::Customer, std::tuple<int16_t, std::string>> wirepulse::validate::impl::customer(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "29"
+        },
+        "note": "validate customer"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037116943833"
+      },
+      "duration": {
+        "$numberLong": "624625"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/customer.hpp",
+        "caller_function": "std::expected<model::Customer, std::tuple<int16_t, std::string>> wirepulse::validate::impl::customer(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "33"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::Customer, ValueType = std::string]",
+        "line": {
+          "$numberLong": "544"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037116945416"
+      },
+      "duration": {
+        "$numberLong": "621667"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::Customer, ValueType = std::string]",
+        "caller_line": {
+          "$numberLong": "570"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(std::string_view, ValueType, std::string_view, spt::ilp::APMRecord &, bool) [M = wirepulse::model::Customer, ValueType = std::string]",
+        "line": {
+          "$numberLong": "568"
+        },
+        "process": "retrieve data"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037117579166"
+      },
+      "duration": {
+        "$numberLong": "301334"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/impl/facility.hpp",
+        "caller_function": "std::expected<std::optional<model::Facility>, std::tuple<int16_t, std::string>> wirepulse::validate::impl::facility(Model &, const model::JwtToken &, spt::ilp::APMRecord &) [Model = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "45"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(bsoncxx::oid, std::string_view, spt::ilp::APMRecord &) [M = wirepulse::model::Facility]",
+        "line": {
+          "$numberLong": "442"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037117583333"
+      },
+      "duration": {
+        "$numberLong": "295250"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(bsoncxx::oid, std::string_view, spt::ilp::APMRecord &) [M = wirepulse::model::Facility]",
+        "caller_line": {
+          "$numberLong": "466"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(bsoncxx::oid, std::string_view, spt::ilp::APMRecord &) [M = wirepulse::model::Facility]",
+        "line": {
+          "$numberLong": "464"
+        },
+        "note": "Return cached value",
+        "process": "retrieve cached value"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037117900583"
+      },
+      "duration": {
+        "$numberLong": "917792"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/validate/inventoryitemtransaction.cpp",
+        "caller_function": "Tuple wirepulse::validate::validate(model::InventoryItemTransaction &, const model::JwtToken &, spt::ilp::APMRecord &)",
+        "caller_line": {
+          "$numberLong": "49"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(bsoncxx::oid, std::string_view, spt::ilp::APMRecord &) [M = wirepulse::model::InventoryItem]",
+        "line": {
+          "$numberLong": "442"
+        }
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037117923541"
+      },
+      "duration": {
+        "$numberLong": "888500"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::retrieve(bsoncxx::oid, std::string_view, spt::ilp::APMRecord &) [M = wirepulse::model::InventoryItem]",
+        "caller_line": {
+          "$numberLong": "458"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::pipeline(std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItem]",
+        "line": {
+          "$numberLong": "247"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037117928958"
+      },
+      "duration": {
+        "$numberLong": "880375"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::pipeline(std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItem]",
+        "caller_line": {
+          "$numberLong": "269"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "std::tuple<int16_t, std::optional<M>> wirepulse::db::pipeline(std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItem]",
+        "line": {
+          "$numberLong": "268"
+        }
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037118834833"
+      },
+      "duration": {
+        "$numberLong": "1195750"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "caller_function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "caller_line": {
+          "$numberLong": "105"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "uint16_t wirepulse::db::create(const M &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "122"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037118851000"
+      },
+      "duration": {
+        "$numberLong": "768875"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "caller_function": "uint16_t wirepulse::db::create(const M &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "caller_line": {
+          "$numberLong": "133"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "uint16_t wirepulse::db::create(const M &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "132"
+        }
+      }
+    },
+    {
+      "type": "Step",
+      "timestamp": {
+        "$numberLong": "390037119620416"
+      },
+      "duration": {
+        "$numberLong": "409250"
+      },
+      "values": {
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/db/repository.hpp",
+        "function": "uint16_t wirepulse::db::create(const M &, spt::ilp::APMRecord &, bool) [M = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "151"
+        },
+        "note": "Cache model"
+      }
+    },
+    {
+      "type": "Function",
+      "timestamp": {
+        "$numberLong": "390037120039750"
+      },
+      "duration": {
+        "$numberLong": "41458"
+      },
+      "values": {
+        "caller_file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/template.hpp",
+        "caller_function": "Response wirepulse::http::create(const spt::http2::framework::Request &, std::string_view, std::span<const std::string>, spt::ilp::APMRecord &, AuthFunction &&, bool) [M = wirepulse::model::InventoryItemTransaction, AuthFunction = bool (*)(std::string_view, const wirepulse::model::JwtToken &)]",
+        "caller_line": {
+          "$numberLong": "115"
+        },
+        "file": "/Users/rakesh/projects/customer/wirepulse/inventory-api/src/http/common.hpp",
+        "function": "void wirepulse::http::output(const spt::http2::framework::Request &, Response &, const M &, spt::ilp::APMRecord &) [M = wirepulse::model::InventoryItemTransaction]",
+        "line": {
+          "$numberLong": "52"
+        }
+      }
+    }
+  ]
+}

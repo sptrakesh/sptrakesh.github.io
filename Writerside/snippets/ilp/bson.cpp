@@ -79,4 +79,81 @@ namespace spt::ilp::bson
 
     return doc << finalize;
   }
+
+  template <typename Record>
+  void parse( Record& r, bsoncxx::document::view bson )
+  {
+    using spt::util::bsonValueIfExists;
+
+    if ( auto tags = bsonValueIfExists<bsoncxx::document::view>( "tags", bson ); tags )
+    {
+      for ( const auto& elem : *tags )
+      {
+        r.tags.try_emplace( std::string{ elem.key() }, std::string{ elem.get_string().value } );
+      }
+    }
+
+    if ( auto values = bsonValueIfExists<bsoncxx::document::view>( "values", bson ); values )
+    {
+      for ( const auto& elem : *values )
+      {
+        switch ( elem.type() )
+        {
+          using enum bsoncxx::type;
+        case k_bool:
+          r.values.try_emplace( std::string{ elem.key() }, elem.get_bool().value );
+          break;
+        case k_int64:
+          r.values.try_emplace( std::string{ elem.key() }, elem.get_int64().value );
+          break;
+        case k_double:
+          r.values.try_emplace( std::string{ elem.key() }, elem.get_double().value );
+          break;
+        case k_string:
+          r.values.try_emplace( std::string{ elem.key() }, std::string{ elem.get_string().value } );
+          break;
+        default:
+          LOG_CRIT << "Invalid type " << bsoncxx::to_string( elem.type() ) << " for key " << elem.key() << " in apm record";
+          break;
+        }
+      }
+    }
+
+  }
+
+  spt::ilp::APMRecord::Process parseProcess( bsoncxx::document::view bson )
+  {
+    using spt::util::bsonValue;
+    using spt::util::bsonValueIfExists;
+    auto p = spt::ilp::APMRecord::Process();
+
+    if ( auto t = magic_enum::enum_cast<spt::ilp::APMRecord::Process::Type>( bsonValue<std::string>( "type", bson ) ); t ) p.type = *t;
+    if ( auto v = bsonValueIfExists<std::chrono::nanoseconds>( "timestamp", bson ); v ) p.timestamp = spt::ilp::APMRecord::DateTime{ *v };
+    if ( auto v = bsonValueIfExists<std::chrono::nanoseconds>( "duration", bson ); v ) p.duration = *v;
+    parse( p, bson );
+    return p;
+  }
+
+  spt::ilp::APMRecord parse( bsoncxx::document::view bson )
+  {
+    using spt::util::bsonValue;
+    using spt::util::bsonValueIfExists;
+
+    auto apm = spt::ilp::APMRecord{ bsonValue<bsoncxx::oid>( "_id", bson ).to_string() };
+    if ( auto str = bsonValueIfExists<std::string>( "application", bson ); str ) apm.application = *str;
+    if ( auto v = bsonValueIfExists<std::chrono::nanoseconds>( "timestamp", bson ); v ) apm.timestamp = spt::ilp::APMRecord::DateTime{ *v };
+    if ( auto v = bsonValueIfExists<std::chrono::nanoseconds>( "duration", bson ); v ) apm.duration = *v;
+    parse( apm, bson );
+
+    if ( auto procs = bsonValueIfExists<bsoncxx::array::view>( "processes", bson ); procs )
+    {
+      apm.processes.reserve( std::distance( procs->begin(), procs->end() ) );
+      for ( const auto& item : *procs )
+      {
+        apm.processes.emplace_back( parseProcess( item.get_document().value ) );
+      }
+    }
+
+    return apm;
+  }
 }

@@ -7,7 +7,7 @@ managed.  The instrumentation results in data being published to services
 provided by the service vendor.
 
 A customer needed a solution which did not involve publishing management data to
-and external service.  They also did not want an expensive commercial solution.
+an external service.  They also did not want an expensive commercial solution.
 After researching available options, I decided to roll out a very simple framework
 that used existing infrastructure (mainly in terms of database).  The basic task
 of instrumenting source code remains unchanged in scope.
@@ -43,7 +43,7 @@ implementation.  The full record can then be serialised over **ILP** to a suppor
     <code-block lang="C++" src="ilp/apmrecord.cpp" collapsible="true"/>
   </tab>
   <tab title="BSON" id="apm-model-bson">
-    Utility functions to serialise the full APM record to BSON.
+    Utility functions to (de)serialise the full APM record from/to BSON.
     <code-block lang="C++" src="ilp/bson.cpp" collapsible="true"/>
   </tab>
 </tabs>
@@ -73,7 +73,26 @@ instructions.
     A custom HTTP response structure that is used by the application.  The APM record is saved to MongoDB via the <a href="mongo-service.md">mongo-service</a> proxy.
     <code-block lang="C++" src="ilp/response.cpp" collapsible="true"/>
   </tab>
+  <tab title="Sample" id="apm-instrument-sample">
+    A sample APM record document generated during an integration test run from my local MongoDB instance.
+    <code-block lang="JSON" src="ilp/apmrecord.json" collapsible="true"/>
+  </tab>
 </tabs>
+
+### General Procedure
+We follow the following general procedure for capturing **APM** data.
+* Create an **APM Record** at the start of a business process cycle.  For our REST API handlers, we start by
+  creating a record at the start of the handler function, and finish it (typically setting the duration) at
+  the end of the function.  See lines `31`, `38` etc. in the *Handler* tab above.
+* All our interfaces were modified to accept an additional `APMRecord` parameter.  We then pass the APM record
+  all the way through the function call chain.
+* We wrap each function invocation in a `WRAP_CODE_LINE` macro (see the *Handler* tab above).  This ensures 
+  that each invocation results in the caller function being added to the `APMRecord::Process` record.
+* At the start of each function, we add a `APMRecord::Process` to the apm record.
+* We call the `setDuration` function at the end of each function (via a `DEFER` macro - see [defer.hpp](https://github.com/sptrakesh/mongo-service/blob/master/src/common/util/defer.hpp)).
+* We add notes, errors etc. as appropriate to the process record to further enhance the data in the APM database.
+* At the end of the business process cycle, we *publish* the APM data.
+* See *Sample* tab above for a sample of the APM data collection in our application during a HTTP request process.
 
 ## Publish Data
 The gathered APM data needs to be published to a supported database for requisite analysis.  There are a variety of options
