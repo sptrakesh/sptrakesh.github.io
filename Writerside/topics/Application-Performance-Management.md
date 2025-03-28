@@ -98,6 +98,9 @@ We follow the following general procedure for capturing **APM** data.
 The gathered APM data needs to be published to a supported database for requisite analysis.  There are a variety of options
 available for publishing the data.  Some of the options I considered were the following:
 * Publish the APM records directly over **ILP**.  This generally requires maintaining a connection pool of **ILP** clients.
+  Alternatively, we can write the APM records to a *concurrent queue*, and then consume and publish from the *queue* in
+  a dedicated *thread*.  Using a *queue* incurs the potential for unconsumed records being lost during a service 
+  shutdown process.
 * Write the individual APM records as simple text files to a directory, and have another process monitor the
   directory and publish each batch of records to QuestDB over **ILP**.
   * A small variation of the above.  Instead of writing to a local (generally a mounted) directory, to allow another
@@ -135,6 +138,7 @@ Data stored in QuestDB can be viewed by any tool that supports the PostgreSQL wi
 <seealso>
   <category ref="source">
     <a href="https://github.com/sptrakesh/mongo-service/tree/master/src/ilp">ILP framework</a>
+    <a href="https://github.com/sptrakesh/mongo-service/blob/master/src/common/util/defer.hpp">defer.hpp</a>
   </category>
   <category ref="external">
     <a href="https://questdb.com/">QuestDB</a>
