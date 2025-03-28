@@ -83,16 +83,18 @@ instructions (macros despite being discouraged help a lot to reduce clutter).
 We follow the following general procedure for capturing **APM** data.
 * Create an **APM Record** at the start of a business process cycle.  For our REST API handlers, we start by
   creating a record at the start of the handler function, and finish it (typically setting the duration) at
-  the end of the function.  See lines `31`, `38` etc. in the *Handler* tab above.
+  the end of the function.  See lines `31`, `38` etc. in the [Handler](#apm-instrument-handler) tab above.
 * All our interfaces were modified to accept an additional `APMRecord` parameter.  We then pass the APM record
   all the way through the function call chain.
-* We wrap each function invocation in a `WRAP_CODE_LINE` macro (see the *Handler* tab above).  This ensures 
+* We wrap each function invocation in a `WRAP_CODE_LINE` macro (see the [Handler](#apm-instrument-handler) tab above).  This ensures 
   that each invocation results in the caller function being added to the `APMRecord::Process` record.
 * At the start of each function, we add a `APMRecord::Process` to the apm record.
 * We call the `setDuration` function at the end of each function (via a `DEFER` macro - see [defer.hpp](https://github.com/sptrakesh/mongo-service/blob/master/src/common/util/defer.hpp)).
 * We add notes, errors etc. as appropriate to the process record to further enhance the data in the APM database.
+* For functions that call out to third-party APIs, we add a process of type `Step`, and capture basic metrics around
+  that invocation.
 * At the end of the business process cycle, we *publish* the APM data.
-* See *Sample* tab above for a sample of the APM data collection in our application during a HTTP request process.
+* See [Sample](#apm-instrument-sample) tab above for a sample of the APM data collection in our application during a HTTP request process.
 
 ## Publish Data
 The gathered APM data needs to be published to a supported database for requisite analysis.  There are a variety of options
