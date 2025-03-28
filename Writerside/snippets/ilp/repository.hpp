@@ -10,6 +10,7 @@
 #include "metadata.hpp"
 #include "model/entities.hpp"
 #include "model/entitiesquery.hpp"
+#include "model/json.hpp"
 #include "model/ilp.hpp"
 #include "model/model.hpp"
 #include "model/refcount.hpp"
@@ -36,6 +37,11 @@ namespace spt::db
   using std::operator""sv;
   using std::operator""s;
   using model::Model;
+
+#define WRAP_CODE_LINE(...) \
+  idx = apm.processes.size(); \
+  __VA_ARGS__ \
+  spt::ilp::addCurrentFunction( apm.processes[idx] );
 
   inline std::string cacheKey( std::string_view type, bsoncxx::oid id )
   {
@@ -308,6 +314,7 @@ namespace spt::db
 
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     try
     {
@@ -347,17 +354,13 @@ namespace spt::db
       }
       else
       {
-        auto idx = apm.processes.size();
-        if ( const auto [cstatus, csize] = count<M>( match, apm ); cstatus == 200 ) ms.total = csize;
-        spt::ilp::addCurrentFunction( apm.processes[idx] );
+        WRAP_CODE_LINE( if ( const auto [cstatus, csize] = count<M>( match, apm ); cstatus == 200 ) ms.total = csize; )
       }
 
       if ( ms.page > 0 && ms.total != ms.page )
       {
-        auto idx = apm.processes.size();
-        auto [lstatus, lv] = lastId<M>( match, document{} << "_id" << 1 << finalize,
-          document{} << "_id" << (options.descending ? 1 : -1) << finalize, apm );
-        spt::ilp::addCurrentFunction( apm.processes[idx] );
+        WRAP_CODE_LINE( auto [lstatus, lv] = lastId<M>( match, document{} << "_id" << 1 << finalize,
+          document{} << "_id" << (options.descending ? 1 : -1) << finalize, apm ); )
         if ( lstatus != 200 ) return { lstatus, std::nullopt };
 
         auto lid = ms.entities.back().id;
@@ -436,11 +439,11 @@ namespace spt::db
   {
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     if ( auto pl = model::pipeline<M>(); !pl.empty() )
     {
       LOG_DEBUG << "Entity " << M::EntityType() << " requires pipeline. APM id: " << apm.id;
-      auto pidx = apm.processes.size();
 
       auto filter = filter::Id{ customer, id };
       auto stages = std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>{};
@@ -450,8 +453,7 @@ namespace spt::db
       stages.insert( stages.end(), std::make_move_iterator( pl.begin() ), std::make_move_iterator( pl.end() ) );
       pl.erase( pl.begin(), pl.end() );
 
-      auto result = pipeline<M>( std::move( stages ), apm );
-      spt::ilp::addCurrentFunction( apm.processes[pidx] );
+      WRAP_CODE_LINE( auto result = pipeline<M>( std::move( stages ), apm ); )
       return result;
     }
 
@@ -539,10 +541,10 @@ namespace spt::db
 
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     if ( auto pl = model::pipeline<M>(); !pl.empty() )
     {
-      auto pidx = apm.processes.size();
       LOG_DEBUG << "Entity " << M::EntityType() << " requires pipeline. APM id: " << apm.id;
       auto stages = std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>{};
       stages.reserve( 3 + pl.size() );
@@ -555,8 +557,7 @@ namespace spt::db
       stages.insert( stages.end(), std::make_move_iterator( pl.begin() ), std::make_move_iterator( pl.end() ) );
       pl.erase( pl.begin(), pl.end() );
 
-      auto result = pipeline<M>( std::move( stages ), apm, caseInsensitive );
-      spt::ilp::addCurrentFunction( apm.processes[pidx] );
+      WRAP_CODE_LINE( auto result = pipeline<M>( std::move( stages ), apm, caseInsensitive ); )
       return result;
     }
 
@@ -636,11 +637,11 @@ namespace spt::db
 
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     if ( auto pl = model::pipeline<M>(); !pl.empty() )
     {
       LOG_DEBUG << "Entity " << M::EntityType() << " requires pipeline. APM id: " << apm.id;
-      auto pidx = apm.processes.size();
 
       auto stages = std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>{};
       stages.reserve( pl.size() + 3 );
@@ -651,8 +652,7 @@ namespace spt::db
       stages.insert( stages.end(), std::make_move_iterator( pl.begin() ), std::make_move_iterator( pl.end() ) );
       pl.erase( pl.begin(), pl.end() );
 
-      auto result = pipeline<M>( std::move( query ), std::move( stages ), options, apm );
-      spt::ilp::addCurrentFunction( apm.processes[pidx] );
+      WRAP_CODE_LINE( auto result = pipeline<M>( std::move( query ), std::move( stages ), options, apm ); )
       return result;
     }
 
@@ -690,17 +690,13 @@ namespace spt::db
       }
       else
       {
-        auto pidx = apm.processes.size();
-        if ( const auto [cstatus, csize] = count<M>( query, apm ); cstatus == 200 ) ms.total = csize;
-        spt::ilp::addCurrentFunction( apm.processes[pidx] );
+        WRAP_CODE_LINE( if ( const auto [cstatus, csize] = count<M>( query, apm ); cstatus == 200 ) ms.total = csize; )
       }
 
       if ( ms.page > 0 && ms.total != ms.page )
       {
-        auto pidx = apm.processes.size();
-        auto [lstatus, lv] = lastId<M>( query, document{} << "_id" << 1 << finalize,
-          document{} << "_id" << (options.descending ? 1 : -1) << finalize, apm );
-        spt::ilp::addCurrentFunction( apm.processes[pidx] );
+        WRAP_CODE_LINE( auto [lstatus, lv] = lastId<M>( query, document{} << "_id" << 1 << finalize,
+          document{} << "_id" << (options.descending ? 1 : -1) << finalize, apm ); )
         if ( lstatus != 200 )
         {
           cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving last id" );
@@ -801,13 +797,13 @@ namespace spt::db
 
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     auto f = filter::Property<ValueType>{ property, value, customer };
 
     if ( auto pl = model::pipeline<M>(); !pl.empty() )
     {
       LOG_DEBUG << "Entity " << M::EntityType() << " requires pipeline. APM id: " << apm.id;
-      auto pidx = apm.processes.size();
 
       auto stages = std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>{};
       stages.reserve( pl.size() + 3 );
@@ -818,8 +814,7 @@ namespace spt::db
       stages.insert( stages.end(), std::make_move_iterator( pl.begin() ), std::make_move_iterator( pl.end() ) );
       pl.erase( pl.begin(), pl.end() );
 
-      auto result = rawpipeline<M>( std::move( stages ), apm );
-      spt::ilp::addCurrentFunction( apm.processes[pidx] );
+      WRAP_CODE_LINE( auto result = rawpipeline<M>( std::move( stages ), apm ); )
       return result;
     }
 
@@ -899,12 +894,12 @@ namespace spt::db
 
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     if ( auto pl = model::pipeline<M>(); !pl.empty() )
     {
       LOG_DEBUG << "Entity " << M::EntityType() << " requires pipeline. APM id: " << apm.id;
 
-      auto idx = apm.processes.size();
       auto stages = std::vector<spt::mongoservice::api::model::request::Pipeline::Document::Stage>{};
       stages.reserve( pl.size() + 3 );
       stages.emplace_back( "$match", spt::util::bson( filter ) );
@@ -914,8 +909,7 @@ namespace spt::db
       stages.insert( stages.end(), std::make_move_iterator( pl.begin() ), std::make_move_iterator( pl.end() ) );
       pl.erase( pl.begin(), pl.end() );
 
-      auto result = pipeline<M>( spt::util::marshall( filter ), std::move( stages ), options, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto result = pipeline<M>( spt::util::marshall( filter ), std::move( stages ), options, apm ); )
       return result;
     }
 
@@ -953,18 +947,14 @@ namespace spt::db
       }
       else
       {
-        auto idx = apm.processes.size();
-        if ( const auto [cstatus, csize] = count<M>( *retrieve.document, apm ); cstatus == 200 ) ms.total = csize;
-        spt::ilp::addCurrentFunction( apm.processes[idx] );
+        WRAP_CODE_LINE( if ( const auto [cstatus, csize] = count<M>( *retrieve.document, apm ); cstatus == 200 ) ms.total = csize; )
       }
 
       if ( ms.page > 0 && ms.total != ms.page )
       {
-        auto idx = apm.processes.size();
-        auto [lstatus, lv] = lastId<M>( *retrieve.document,
+        WRAP_CODE_LINE( auto [lstatus, lv] = lastId<M>( *retrieve.document,
           document{} << filter.field << 1 << finalize,
-          document{} << filter.field << (options.descending ? 1 : -1) << finalize, apm );
-        spt::ilp::addCurrentFunction( apm.processes[idx] );
+          document{} << filter.field << (options.descending ? 1 : -1) << finalize, apm ); )
         if ( lstatus != 200 )
         {
           cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving last id" );
@@ -1065,12 +1055,11 @@ namespace spt::db
   {
     auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( p ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto pidx = apm.processes.size();
-      auto [rstatus, rc] = refcounts<M>( id, apm );
-      spt::ilp::addCurrentFunction( apm.processes[pidx] );
+      WRAP_CODE_LINE( auto [rstatus, rc] = refcounts<M>( id, apm ); )
       if ( rstatus != 200 ) return rstatus;
       if ( rc )
       {
@@ -1104,6 +1093,77 @@ namespace spt::db
 
       auto resp = spt::mongoservice::api::repository::remove( req );
       spt::ilp::setDuration( cp );
+
+      if ( !resp.has_value() )
+      {
+        LOG_WARN << "Error deleting document " << M::Database() << ':' << M::Collection() << ':' << id.to_string() << ". " <<
+          magic_enum::enum_name( resp.error().cause ) << ". " << resp.error().message << ". APM id: " << apm.id;
+        cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, std::format( "Database error. {}", resp.error().message ) );
+
+        return 417;
+      }
+
+      auto iter = ranges::find_if( resp.value().success, [&id]( const bsoncxx::oid& oid ) { return oid == id; } );
+      if ( iter == ranges::end( resp.value().success ) )
+      {
+        LOG_WARN << "No document deleted for " << M::Database() << ':' << M::Collection() << ':' << id.to_string() << ". APM id: " << apm.id;
+        cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "No document deleted" );
+
+        return 417;
+      }
+
+      {
+        auto& dc = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Step );
+        dc.values.try_emplace( model::ilp::name::APM_STEP_PROCESS, "remove cache entry" );
+        spt::ilp::addCurrentFunction( dc );
+        util::Configuration::instance().remove( cacheKey( M::EntityType(), id ) );
+        spt::ilp::setDuration( dc );
+      }
+
+      return 200;
+    }
+    catch ( const std::exception& ex )
+    {
+      LOG_WARN << "Error removing document " << M::Database() << ':' << M::Collection() << ':' << id.to_string() <<
+        ". " << ex.what() << ". APM id: " << apm.id;
+      LOG_WARN << util::stacktrace();
+      spt::ilp::addException( apm, ex, "Exception" );
+      return 422;
+    }
+    catch ( ... )
+    {
+      LOG_WARN << "Unknown error removing document " << M::Database() << ':' << M::Collection() << ':' << id.to_string() << ". APM id: " << apm.id;
+      LOG_WARN << util::stacktrace();
+      p.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Unexpected error" );
+    }
+
+    return 500;
+  }
+
+  template <Model M>
+  int16_t rawremove( bsoncxx::oid id, std::string_view customer, spt::ilp::APMRecord& apm )
+  {
+    auto& p = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
+    DEFER( spt::ilp::setDuration( p ) );
+
+    try
+    {
+      auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Step );
+      cp.values.try_emplace( model::ilp::name::APM_STEP_PROCESS, "remove data" );
+      spt::ilp::addCurrentFunction( cp );
+
+      auto now = std::chrono::system_clock::now();
+      auto req = spt::mongoservice::api::model::request::Delete<filter::Id, Metadata>( filter::Id{} );
+      req.database = M::Database();
+      req.collection = M::Collection();
+      req.correlationId = apm.id;
+      req.document->id = id;
+      if ( !customer.empty() ) req.document->customer = customer;
+      req.metadata.emplace();
+      req.metadata->year = std::format( "{:%Y}", now );
+      req.metadata->month = std::format( "{:%m}", now );
+
+      auto resp = spt::mongoservice::api::repository::remove( req );
 
       if ( !resp.has_value() )
       {

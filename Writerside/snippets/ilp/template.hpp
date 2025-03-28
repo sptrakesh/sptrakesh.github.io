@@ -53,6 +53,7 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Create entity {}", M::EntityType() ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     if ( payload.empty() )
     {
@@ -63,10 +64,7 @@ namespace spt::http
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
-
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Authorisation failed" );
@@ -79,7 +77,12 @@ namespace spt::http
         return error( 401, methods, req.header, apm );
       }
 
+      auto& parse = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Step );
+      DEFER( spt::ilp::setDuration( parse ) );
+      spt::ilp::addCurrentFunction( parse );
+      parse.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, "Parse JSON payload" );
       auto m = M{ payload };
+      spt::ilp::setDuration( parse );
 
       if ( m.id != model::DEFAULT_OID )
       {
@@ -88,9 +91,7 @@ namespace spt::http
         return error( 400, "Cannot specify id"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [vstatus, vmesg] = validate::validate( m, *jwt, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [vstatus, vmesg] = validate::validate( m, *jwt, apm ); )
       if ( vstatus != 200 )
       {
         LOG_WARN << "Validation failed. " << vmesg << ". APM id: " << apm.id;
@@ -101,9 +102,7 @@ namespace spt::http
       if ( m.id == model::DEFAULT_OID ) m.id = bsoncxx::oid{};
       cp.values.try_emplace( "entity_id", m.id.to_string() );
 
-      idx = apm.processes.size();
-      auto status = db::create( m, apm, skipVersion );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto status = db::create( m, apm, skipVersion ); )
       if ( status != 200 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Database error" );
@@ -113,9 +112,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -161,6 +158,7 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Create entity {} at time", M::EntityType() ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     if ( payload.empty() )
     {
@@ -191,10 +189,7 @@ namespace spt::http
         return error( 400, "Invalid timestamp"sv, methods, req.header, apm );
       }
 
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
-
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -206,7 +201,12 @@ namespace spt::http
         return error( 401, methods, req.header, apm );
       }
 
+      auto& parse = addProcess( apm, spt::ilp::APMRecord::Process::Type::Step );
+      spt::ilp::addCurrentFunction( parse );
+      parse.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, "Parse JSON payload" );
+      DEFER( spt::ilp::setDuration( parse ) );
       auto m = M{ payload };
+      spt::ilp::setDuration( apm );
 
       if ( m.id != model::DEFAULT_OID )
       {
@@ -215,9 +215,7 @@ namespace spt::http
         return error( 400, "Cannot specify id"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [vstatus, vmesg] = validate::validate( m, *jwt, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [vstatus, vmesg] = validate::validate( m, *jwt, apm ); )
       if ( vstatus != 200 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Validation failed" );
@@ -245,9 +243,7 @@ namespace spt::http
       cp.values.try_emplace( "entity_id", m.id.to_string() );
       m.metadata.created = *ts;
 
-      idx = apm.processes.size();
-      auto status = db::create( m, apm, skipVersion );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto status = db::create( m, apm, skipVersion ); )
       if ( status != 200 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error creating entity" );
@@ -257,9 +253,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -305,6 +299,7 @@ namespace spt::http
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Update entity {}", M::EntityType() ) );
     DEFER( spt::ilp::setDuration( cp ) );
     cp.values.try_emplace( "entity_id", std::string{ entityId } );
+    auto idx = apm.processes.size();
 
     if ( payload.empty() )
     {
@@ -315,9 +310,7 @@ namespace spt::http
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -330,7 +323,12 @@ namespace spt::http
         return error( 401, methods, req.header, apm );
       }
 
+      auto& parse = addProcess( apm, spt::ilp::APMRecord::Process::Type::Step );
+      spt::ilp::addCurrentFunction( parse );
+      parse.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, "Parse JSON payload" );
+      DEFER( spt::ilp::setDuration( parse ) );
       auto m = M{ payload };
+      spt::ilp::setDuration( parse );
 
       if ( m.id.to_string() != entityId )
       {
@@ -340,9 +338,7 @@ namespace spt::http
         return error( 400, "Incorrect id"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      const auto [vstatus, vmesg] = validate::validate( m, *jwt, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( const auto [vstatus, vmesg] = validate::validate( m, *jwt, apm ); )
       if ( vstatus != 200 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Validation failed" );
@@ -352,11 +348,9 @@ namespace spt::http
       std::optional<bsoncxx::oid> restoredFrom = std::nullopt;
       if ( auto iter = req.header.find( "x-wp-restored-from" ); iter != req.header.end() ) restoredFrom = spt::util::parseId( iter->second.value );
 
-      idx = apm.processes.size();
-      const auto status = db::update( m,
+      WRAP_CODE_LINE( const auto status = db::update( m,
           jwt->user.role == model::Role::superuser ? ""sv : jwt->user.customerCode,
-          apm, false, restoredFrom );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+          apm, false, restoredFrom ); )
       if ( status != 200 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Database error" );
@@ -365,18 +359,14 @@ namespace spt::http
 
       if ( const auto p = model::pipeline<M>(); !p.empty() )
       {
-        idx = apm.processes.size();
-        auto [mstatus, mopt] = db::retrieve<M>( m.id, m.customer.code, apm );
-        spt::ilp::addCurrentFunction( apm.processes[idx] );
+        WRAP_CODE_LINE( auto [mstatus, mopt] = db::retrieve<M>( m.id, m.customer.code, apm ); )
         if ( mopt ) m = std::move( *mopt );
       }
 
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -420,12 +410,11 @@ namespace spt::http
 
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -446,11 +435,9 @@ namespace spt::http
         return error( 400, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::retrieve<M>( *id,
+      WRAP_CODE_LINE( auto [mstatus, m] = db::retrieve<M>( *id,
           jwt->user.role == model::Role::superuser ? ""sv : jwt->user.customerCode,
-          apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+          apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Database error" );
@@ -472,9 +459,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -514,12 +499,11 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Retrieve entity {} by property {}", M::EntityType(), property ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -532,10 +516,8 @@ namespace spt::http
         return error( 401, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::retrieve<M,ValueType>( property, value,
-          jwt->user.role == model::Role::superuser ? ""sv : jwt->user.customerCode, apm, caseInsensitive );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::retrieve<M,ValueType>( property, value,
+          jwt->user.role == model::Role::superuser ? ""sv : jwt->user.customerCode, apm, caseInsensitive ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -557,9 +539,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -598,12 +578,11 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Retrieve entity {} by property {}", M::EntityType(), property ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -616,10 +595,8 @@ namespace spt::http
         return error( 401, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::retrieve<M,ValueType>(
-          property, value, std::string{ customerCode.data(), customerCode.size() }, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::retrieve<M,ValueType>(
+          property, value, std::string{ customerCode.data(), customerCode.size() }, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -635,9 +612,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -675,21 +650,18 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "List entity {}", M::EntityType() ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [qstatus, eq] = parseQuery( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [qstatus, eq] = parseQuery( req, apm ); )
       if ( qstatus != 200 || !eq )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid query" );
         return error( 400, "Invalid query"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -725,9 +697,7 @@ namespace spt::http
             bsoncxx::builder::stream::close_document;
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -743,9 +713,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -783,21 +751,18 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "List entity {} for customer {}", M::EntityType(), customerCode ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [qstatus, eq] = parseQuery( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [qstatus, eq] = parseQuery( req, apm ); )
       if ( qstatus != 200 || !eq )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid query" );
         return error( 400, "Invalid query"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -830,9 +795,7 @@ namespace spt::http
             bsoncxx::builder::stream::close_document;
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -848,9 +811,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -889,21 +850,18 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "List entity {} by property {}", M::EntityType(), property ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [qstatus, eq] = parseQuery( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [qstatus, eq] = parseQuery( req, apm ); )
       if ( qstatus != 200 || !eq )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid query" );
         return error( 400, "Invalid query"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -941,9 +899,7 @@ namespace spt::http
           bsoncxx::builder::stream::close_document;
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -959,9 +915,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -999,21 +953,18 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "List entity {} by reference {}", M::EntityType(), type ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [qstatus, eq] = parseQuery( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [qstatus, eq] = parseQuery( req, apm ); )
       if ( qstatus != 200 || !eq )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid query" );
         return error( 400, "Invalid query"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -1059,9 +1010,7 @@ namespace spt::http
             bsoncxx::builder::stream::close_document;
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::query<M>( query << bsoncxx::builder::stream::finalize, *eq, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -1077,9 +1026,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -1119,21 +1066,18 @@ namespace spt::http
     auto& cp = spt::ilp::addProcess( apm, spt::ilp::APMRecord::Process::Type::Function );
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "List entity {} by date range", M::EntityType() ) );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [qstatus, eq] = parseQuery( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [qstatus, eq] = parseQuery( req, apm ); )
       if ( qstatus != 200 || !eq )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid query" );
         return error( 400, "Invalid query"sv, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -1167,9 +1111,7 @@ namespace spt::http
 
       if ( jwt->user.role != model::Role::superuser ) filter.customer = jwt->user.customerCode;
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::between<M>( std::move( filter ), *eq, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::between<M>( std::move( filter ), *eq, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -1185,9 +1127,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -1264,12 +1204,11 @@ namespace spt::http
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Count references to entity {}", M::EntityType() ) );
     cp.values.try_emplace( "entity_id", std::string{ entityId } );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -1290,9 +1229,7 @@ namespace spt::http
         return error( 400, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::refcounts<M>( *id, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::refcounts<M>( *id, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -1308,9 +1245,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -1349,12 +1284,11 @@ namespace spt::http
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Remove entity {}", M::EntityType() ) );
     cp.values.try_emplace( "entity_id", std::string{ entityId } );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -1375,10 +1309,8 @@ namespace spt::http
         return error( 400, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      const auto mstatus = db::remove<M>( *id,
-          jwt->user.role == model::Role::superuser ? ""sv : jwt->user.customerCode, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( const auto mstatus = db::remove<M>( *id,
+          jwt->user.role == model::Role::superuser ? ""sv : jwt->user.customerCode, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error deleting entity" );
@@ -1432,12 +1364,11 @@ namespace spt::http
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Retrieve version history summary for entity {}", M::EntityType() ) );
     cp.values.try_emplace( "entity_id", std::string{ entityId } );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -1458,9 +1389,7 @@ namespace spt::http
         return error( 400, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::versionHistorySummary<M>( *id, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::versionHistorySummary<M>( *id, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -1476,9 +1405,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();
@@ -1517,12 +1444,11 @@ namespace spt::http
     cp.values.try_emplace( model::ilp::name::APM_NOTE_VALUE, std::format( "Retrieve version history document for entity {}", M::EntityType() ) );
     cp.values.try_emplace( "entity_id", std::string{ historyId } );
     DEFER( spt::ilp::setDuration( cp ) );
+    auto idx = apm.processes.size();
 
     try
     {
-      auto idx = apm.processes.size();
-      auto [astatus, jwt] = authorise( req, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [astatus, jwt] = authorise( req, apm ); )
       if ( astatus != 200 || !jwt )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Invalid bearer token" );
@@ -1543,9 +1469,7 @@ namespace spt::http
         return error( 400, methods, req.header, apm );
       }
 
-      idx = apm.processes.size();
-      auto [mstatus, m] = db::versionHistoryDocument<M>( *id, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( auto [mstatus, m] = db::versionHistoryDocument<M>( *id, apm ); )
       if ( mstatus != 200 && mstatus != 404 )
       {
         cp.values.try_emplace( model::ilp::name::APM_ERROR_VALUE, "Error retrieving entity" );
@@ -1561,9 +1485,7 @@ namespace spt::http
       LOG_INFO << "Writing response for " << req.path << ". APM id: " << apm.id;
       auto resp = Response{ req.header };
       resp.jwt = jwt;
-      idx = apm.processes.size();
-      output( req, resp, *m, apm );
-      spt::ilp::addCurrentFunction( apm.processes[idx] );
+      WRAP_CODE_LINE( output( req, resp, *m, apm ); )
       resp.correlationId = correlationId( req );
       resp.set( methods, Response::origins() );
       resp.entity = M::EntityType();

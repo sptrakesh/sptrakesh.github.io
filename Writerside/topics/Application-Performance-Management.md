@@ -115,7 +115,7 @@ available for publishing the data.  Some of the options I considered were the fo
     * QuestDB is not set up in a very robust manner.  Just a docker container running on a AWS EC2 host alongside
     other daemon processes.  There is no backup strategy.  All the data can be recreated from our Atlas database, which
     is our database of record.
-    * All applications/services have a connection pool to <a href="mongo-service.md">mongo-service</a>.  There is no
+    * All applications/services have a connection pool to [mongo-service](mongo-service.md).  There is no
     need to maintain yet another connection pool to QuestDB, which would also result in needing to increase the number
     of client connections it needs to support.
     * No need for other infrastructure such as AWS EFS to allow processes running on other nodes to access files written
