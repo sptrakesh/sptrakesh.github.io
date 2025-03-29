@@ -137,6 +137,12 @@ available for publishing the data.  Some of the options I considered were the fo
 Data stored in QuestDB can be viewed by any tool that supports the PostgreSQL wire protocol.  We normally use
 [Grafana](https://grafana.com/) for monitoring/analytics, and use the same to display the APM data.
 
+All APM data (data associated with the root `APMRecord` and its children `processes`) are stored in the 
+same table in QuestDB. The parent record does not have a `type` value, and can be used as the discriminator
+to select or filter out the parent record.
+* [APM Records](APM-Sample-Data.md#parent-record)
+* [Process Records](APM-Sample-Data.md#process-records)
+
 <seealso>
   <category ref="source">
     <a href="https://github.com/sptrakesh/mongo-service/tree/master/src/ilp">ILP framework</a>
