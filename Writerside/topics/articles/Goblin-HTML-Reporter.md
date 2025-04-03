@@ -57,12 +57,12 @@ parent directory (default `$PWD/test-results`) as well as a `summary.html` file.
 <code-block lang="Go" src="goblin/TestExample.go" collapsible="true"/>
 
 ## Sample summary report
-<img src="goblin-summary.png" alt="Summary report"/>
+<img src="goblin-summary.png" alt="Summary report" thumbnail="true"/>
 
 ### Sample individual test report
 Using default location, this file is generated as `$PWD/test-results/TestAuth.html`
 
-<img src="goblin-auth-test.png" alt="Summary report"/>
+<img src="goblin-auth-test.png" alt="Summary report" thumbnail="true"/>
 
 ## Reporter Implementation
 <code-block lang="Go" src="goblin/reporter.go" collapsible="true"/>

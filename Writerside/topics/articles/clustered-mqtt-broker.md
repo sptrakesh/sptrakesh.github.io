@@ -141,7 +141,7 @@ services in the cloud stack.
 * `/iot/mqtt/serverCert` - Path to server certificate file.
 * `/iot/mqtt/serverKey` - Path to server certificate key file.
 
-<img src="mqtt-broker.png" alt="MQTT Broker" border-effect="line"/>
+<img src="mqtt-broker.png" alt="MQTT Broker" border-effect="line" thumbnail="true"/>
 
 <seealso>
   <category ref="mqtt-broker">

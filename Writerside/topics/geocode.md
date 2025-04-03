@@ -18,7 +18,7 @@ needs an environment variable `POSITION_STACK_KEY` to be set with the API key.
 Examples of the library and CLI utility.
 
 ### CLI
-<img src="geocodesh.png" alt="geocodesh"/>
+<img src="geocodesh.png" alt="geocodesh" thumbnail="true"/>
 
 ### Library
 <code-block lang="C++" collapsible="true">

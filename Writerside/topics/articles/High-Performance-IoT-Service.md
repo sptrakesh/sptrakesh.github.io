@@ -28,7 +28,7 @@ like **kafka, zookeeper, redis** etc.
 The following high level diagram (intermediaries such as load balancers, VPC's etc.
 omitted for brevity) illustrates the high-level architecture for the system.
 
-<img src="iot-pmdk.png" alt="IoT Service"/>
+<img src="iot-pmdk.png" alt="IoT Service" thumbnail="true"/>
 
 ## Web Service
 The web service is a [Boost.Beast](https://github.com/boostorg/beast) based web socket 
