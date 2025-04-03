@@ -5,7 +5,7 @@ API services.
 Image below shows a panel set up on our Grafana instance.  We set up some dynamic variables to allow
 us to quickly filter the metrics being displayed as appropriate.
 
-<img src="apm-grafana.png" alt="Grafana Panel"/>
+<img src="apm-grafana.png" alt="Grafana Panel" thumbnail="true"/>
 
 ## Parent Record
 A sample of parent records generated from a service is shown below.
