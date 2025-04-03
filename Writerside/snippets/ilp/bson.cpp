@@ -44,7 +44,8 @@ namespace spt::ilp::bson
     auto doc = document{};
     doc << "type" << magic_enum::enum_name( process.type ) <<
       "timestamp" << bsoncxx::types::b_int64{ std::chrono::duration_cast<std::chrono::nanoseconds>( process.timestamp.time_since_epoch() ).count() } <<
-      "duration" << bsoncxx::types::b_int64{ process.duration.count() };
+      "duration" << bsoncxx::types::b_int64{ apm.duration.count() } <<
+      "_ttl" << bsoncxx::types::b_date{ std::chrono::system_clock::now() };
 
     auto tags = document{};
     for ( const auto& [key, value] : process.tags ) tags << key << value;

@@ -43,7 +43,7 @@ implementation.  The full record can then be serialised over **ILP** to a suppor
     <code-block lang="C++" src="ilp/apmrecord.cpp" collapsible="true"/>
   </tab>
   <tab title="BSON" id="apm-model-bson">
-    Utility functions to (de)serialise the full APM record from/to BSON.
+    Utility functions to (de)serialise the full APM record from/to BSON.  Note that we add a <code>_ttl</code> field that is used as a **TTL** index in MongoDB.
     <code-block lang="C++" src="ilp/bson.cpp" collapsible="true"/>
   </tab>
 </tabs>
