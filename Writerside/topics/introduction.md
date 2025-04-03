@@ -3,7 +3,7 @@
 Documentation around my personal projects and work.  Most of my recent projects are actively
 being used at companies I work for or worked for in the past.
 
-View/download my [resume](https://github.com/sptrakesh/sptrakesh.github.io/blob/main/Writerside/images/resume.pdf)
+View/download my [resume](https://1drv.ms/b/c/85539589e6f5a6fd/Ef2m9eaJlVMggIWxbQAAAAABHwzyYFmqJ3fV7CkHao-hbQ?e=mxhucu)
 
 ## Services
 * [config-db](Config-Db.md) Simple multi-master configuration [database](https://github.com/sptrakesh/config-db).
