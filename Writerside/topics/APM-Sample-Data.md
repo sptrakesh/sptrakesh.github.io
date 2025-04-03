@@ -23,6 +23,10 @@ select id, application, entity, customer, host, request_method, response_status,
   request_path, username, role, timestamp
 from webapm
 where type is null
+and action in ($action)
+and entity in ($entity)
+and customer in ($customer)
+and application in ($application)
 and $__timeFilter(timestamp)
 order by timestamp desc
 </code-block>
@@ -207,7 +211,16 @@ APM record.  The query used to generate the data is show below.
 <code-block lang="SQL">
 <![CDATA[
 with latest as 
-(select id from webapm where type is null order by timestamp desc limit 1)
+(
+  select id 
+  from webapm 
+  where type is null
+  and action in ($action)
+  and entity in ($entity)
+  and customer in ($customer)
+  and application in ($application)
+  order by timestamp desc limit 1
+)
 select webapm.id, type, file, function, line, caller_file, caller_function, caller_line, note, duration, timestamp
 from webapm
 inner join latest on webapm.id = latest.id
