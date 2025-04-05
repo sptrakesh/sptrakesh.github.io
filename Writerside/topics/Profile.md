@@ -2,8 +2,8 @@
 View/download my [resume](https://1drv.ms/b/c/85539589e6f5a6fd/Ef2m9eaJlVMggIWxbQAAAAABHwzyYFmqJ3fV7CkHao-hbQ?e=mxhucu)
 
 ## Professional Expertise
-* Polyglot developer with expertise in C/C++, Go,
-Java/Groovy/Scala, JavaScript, Objective-C, Python and Swift
+* Polyglot developer with expertise in C++, Go,
+Java/Groovy/Scala, JavaScript, Objective-C, Python, Julia and Swift
 * NoSQL (Content, Document, Key-Value, and Timeseries
 databases) and RDBMS experience
 * 26+ years of software engineering experience
@@ -11,11 +11,11 @@ databases) and RDBMS experience
 design, implementation, testing, deployment and support)
 
 ## Skills
-* **Programming** - C/C++, Go, Java/Scala, Objective-C, Swift
+* **Programming** - C++, Go, Java/Scala, Objective-C, Swift
 * **GUI Development** - Qt, Cocoa/iOS UIKit, Android, Wt
-* **Scripting** - Groovy, JavaScript, Python, SQL, Bourne/Korn Shell
-* **DBMS** - MongoDB, Google Data Store, HBase/Hypertable,
-  PostgreSQL, MySQL, SQLite, RocksDB, Java Object Databases, Java Content Repository
+* **Scripting** - Groovy, JavaScript, Julia, Python, SQL, Bourne/Korn Shell
+* **DBMS** - [MongoDB](mongo-service.md), Google Data Store, HBase/Hypertable,
+  PostgreSQL, MySQL, SQLite, [RocksDB](Config-Db.md), Redis, Java Object Databases, Java Content Repository
 * **Serialisation Formats** - BSON, JSON, GraphQL, Apache Avro and Thrift, SOAP, XML Schema
 
 ## Work Experience
@@ -32,9 +32,11 @@ covers the latter half of my professional experience.
     <ul>
       <li>Architect, build, manage and operate cloud services and
       infrastructure for Wire Pulse.</li>
-      <li>Developed custom clustered MQTT broker for IoT communications,
-      REST APIs and OpenAPI specifications, daemon and ETL tasks as
-      needed to support SAAS operations.</li>
+      <li>Developed custom clustered <a href="clustered-mqtt-broker.md">MQTT broker</a>
+      for IoT communications, <a href="nghttp2-framework.md">REST APIs</a> and OpenAPI specifications, 
+      daemon and ETL tasks as needed to support SAAS operations.</li>
+      <li>Architect and roll out comprehensive <a href="Application-Performance-Management.md">APM</a>
+      solution for services and processes.</li>
       <li> Developed SSO (single sign on) and data management
       applications using Wt.  Python behave driven playwright tests.</li>
       <li>Terraform for provisioning and maintaining cloud
