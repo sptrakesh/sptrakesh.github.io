@@ -111,9 +111,12 @@ available for publishing the data.  Some of the options I considered were the fo
   these files.  This is purely to improve write efficiency, as the services do not need to create individual files for
   each APM set.  This of course will need the use of mutexes or similar to ensure thread-safety.  This model would not
   work for storing in a cloud blob store.
+  * A variation of the above.  Instead of writing to a file, write rows to a SQLite database.  SQLite supports
+   multiple processes reading the same database file.  There are reports that writing rows to SQLite is faster
+  than writing to a file.
 * Write the APM records to an intermediary database or message queue, from which another process can republish
   the data over **ILP**.  This suffers from a potential issue in that storing to a local file is more fail-proof
-  than writing to an external database.
+  than writing to an external network service.
   * For my current project, we decided to write to MongoDB.  We already had basic HTTP request metrics being collected
   and stored in MongoDB, before eventually being stored in QuestDB.  We decided to maintain the same strategy, while
   replacing the metric with the more comprehensive APM data.  There are a number of reasons for our choice:
@@ -123,6 +126,8 @@ available for publishing the data.  Some of the options I considered were the fo
     * All applications/services have a connection pool to [mongo-service](mongo-service.md).  There is no
     need to maintain yet another connection pool to QuestDB, which would also result in needing to increase the number
     of client connections it needs to support.
+    * Allows us to post-process the information before storing in QuestDB.  In particular, we use the [mmdb](mmdb.md)
+    service to look up geographical information of client IP Address for analytics.
     * No need for other infrastructure such as AWS EFS to allow processes running on other nodes to access files written
     to by the services.
     * This strategy does suffer from the following downsides:

@@ -6,7 +6,7 @@
                  name="Rakesh Vidyadharan"
                  start-page="introduction.md">
 
-  <toc-element topic="introduction.md">
+    <toc-element topic="introduction.md">
       <toc-element topic="Profile.md"/>
   </toc-element>
   <toc-element topic="Config-Db.md">
@@ -46,6 +46,8 @@
         <toc-element topic="nghttp2-framework.md"/>
         <toc-element topic="rest-api-framework.md"/>
     </toc-element>
+    <toc-element topic="Picture-Viewer.md"/>
+    <toc-element topic="Movie-Player.md"/>
     <toc-element topic="geocode.md"/>
   <toc-element topic="OpenAPI-to-LaTeX.md"/>
   <toc-element topic="s3-proxy.md"/>

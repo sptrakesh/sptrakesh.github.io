@@ -14,6 +14,10 @@ View/download my [resume](https://1drv.ms/b/c/85539589e6f5a6fd/Ef2m9eaJlVMggIWxb
 * [s3-proxy](s3-proxy.md) [Serve](https://github.com/sptrakesh/s3-proxy) static files stored in AWS S3.
 * [mmdb-ws](mmdb.md) [Service](https://github.com/sptrakesh/mmdb-ws) for [MaxmindDB](https://db-ip.com/db/download/ip-to-city-lite).
 
+## Applications
+* [Picture Viewer](Picture-Viewer.md) Simple image viewer [application](https://github.com/sptrakesh/pictureviewer) built using [Qt](https://qt.io/).
+* [Movie Player](Movie-Player.md) Simple media player [application](https://github.com/sptrakesh/MoviePlayer) built using [Qt](https://qt.io/).
+
 ## Utilities
 * [geocode](geocode.md) Library for common [geo-coordinate](https://github.com/sptrakesh/geocode) related
   operations I have used on a few projects for companies I worked for.
