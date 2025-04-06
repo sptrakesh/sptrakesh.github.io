@@ -15,7 +15,8 @@ design, implementation, testing, deployment and support)
 * **GUI Development** - Qt, Cocoa/iOS UIKit, Android, Wt
 * **Scripting** - Groovy, JavaScript, Julia, Python, SQL, Bourne/Korn Shell
 * **DBMS** - [MongoDB](mongo-service.md), Google Data Store, HBase/Hypertable,
-  PostgreSQL, MySQL, SQLite, [RocksDB](Config-Db.md), Redis, Java Object Databases, Java Content Repository
+  PostgreSQL, MySQL, SQLite, [RocksDB](Config-Db.md), Redis, Java Object Databases,
+  [Java Content Repository](https://github.com/sptrakesh/jcrmanager)
 * **Serialisation Formats** - BSON, JSON, GraphQL, Apache Avro and Thrift, SOAP, XML Schema
 
 ## Work Experience
