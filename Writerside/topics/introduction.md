@@ -18,6 +18,7 @@ View/download my [resume](https://1drv.ms/b/c/85539589e6f5a6fd/Ef2m9eaJlVMggIWxb
 * [Picture Viewer](Picture-Viewer.md) Simple image viewer [application](https://github.com/sptrakesh/pictureviewer) built using [Qt](https://qt.io/).
 * [Movie Player](Movie-Player.md) Simple media player [application](https://github.com/sptrakesh/MoviePlayer) built using [Qt](https://qt.io/).
   * [Video Player](Video-Player.md) Simple Mac OS X media player [application](https://github.com/sptrakesh/VideoPlayer).
+* [APM Desktop Viewer](APM-Desktop-Viewer.md) Simple [desktop](https://github.com/sptrakesh/apm-viewer/tree/main/desktop) application built using [Qt](https://qt.io/).
 
 ## Utilities
 * [geocode](geocode.md) Library for common [geo-coordinate](https://github.com/sptrakesh/geocode) related
