@@ -10,6 +10,23 @@ call chain when responding to a **REST API** request. This application parses th
 CSV data and renders a *forrest* of *trees*, where each *tree* represents the
 function call chain for a specific **REST API** request.
 
+## Download
+The project uses only Qt, and no other dependencies are needed (other than a build environment
+if building without using an IDE).
+
+```Shell
+cd <path to checked out or downloaded sources>/desktop
+cmake -DCMAKE_PREFIX_PATH=~/Qt/6.9.0/macos -B build -S .
+cmake --build build --parallel
+open build/desktop.app
+```
+
+* [Mac OS X](https://github.com/sptrakesh/apm-viewer/releases/download/v2025.04.23/desktop.dmg)
+  The Mac OS X application is not signed. You will need to enable the application to run via 
+  *System Settings->Privacy & Security* if you wish to run it. It may be easier to check out 
+  the sources and build the application using `cmake` or **Qt Creator**.
+* [Windows](https://github.com/sptrakesh/apm-viewer/releases/download/v2025.04.23/desktop.7z)
+
 ## Strategy
 There are a couple of different ways in which we can convert the flat CSV data
 into a hierarchical model.
@@ -84,3 +101,7 @@ The tree view displays the function call chain when responding to **REST API** e
 The table view displays additional APM data that was collected for each *process*.
 
 <img src="apm-desktop.png" alt="Desktop Application" thumbnail="true"/>
+
+Application running on Windows.
+
+<img src="apm-desktop-windows.png" alt="Windows Desktop Application" thumbnail="true"/>
