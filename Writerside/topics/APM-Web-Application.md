@@ -26,17 +26,27 @@ control the aspects that are configurable.
 * `QUESTDB_URI` The PostgreSQL connection URI.  Default `postgresql://user:quest@localhost:8812/qdb`
 * `APM_TABLE` The database table that holds the APM records.  Defaults to `webapm`.  Only one table is supported
   by the application at present.
+* `SECURE_COOKIE` Specify `true` to set *secure* cookies (requires `https`).
+  Cookies are used to track login sessions.
 
 ## Authentication
-There is a basic (and quite insecure) authentication layer for the application. This is just to ensure that
+There is a rudimentary (and quite insecure) authentication layer for the application. This is just to ensure that
 the application is not publicly accessible if deployed on the internet.  Ideally, the application is deployed in
 a private network, and accessible only over VPN.  The `username` and `password` combination for logging in can
 be controlled via environment variables.
 
 ## Docker
 A docker [image](https://hub.docker.com/r/sptrakesh/apm-app) is available for the web application.
-Specify the mandatory `QUESTDB_URI` environment variable, along with any other variable as
-appropriate.
+
+### Environment variables
+The following variables can be used to customise the service.  The QuestDB URI
+variable as specified earlier, except there is no default value.
+
+* `QUESTDB_URI` The PostgreSQL connection URI.
+* `PORT` Specify the port on which the server listens to.  Default `8000`.
+
+It is recommended to volume mount a `/tmp/apm-sessions.json` file, which is used to track
+sessions. This allows sessions to survive service restarts.
 
 ```shell
 docker pull questdb/questdb
@@ -52,10 +62,12 @@ docker run -d --rm \
   -p 9000:9000 -p 9009:9009 -p 8812:8812 -p 9003:9003 \
   --network spt-net \
   --name questdb questdb/questdb
+touch $HOME/tmp/spt/apm-sessions.json
 docker run --rm -d \
   -e "APM_USERNAME=apm" \
   -e "APM_PASSWORD=apm" \
   -e "QUESTDB_URI=postgresql://user:quest@questdb:8812/qdb" \
+  -v "$HOME/tmp/spt/apm-sessions.json:/tmp/apm-sessions.json" \
   -p 8000:8000 \
   --network spt-net \
   --name apm-app \
@@ -64,7 +76,11 @@ docker run --rm -d \
 docker stop apm-app questdb
 ```
 
+Once started, the application can be accessed at `http://localhost:8000/a`
+
 ## Screen captures
+<img src="apm-web-login.png" alt="Login Screen" thumbnail="true"/>
+
 <img src="apm-web-list.png" alt="List View" thumbnail="true"/>
 
 <img src="apm-web-details.png" alt="APM Details" thumbnail="true"/>
