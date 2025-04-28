@@ -35,6 +35,73 @@ the application is not publicly accessible if deployed on the internet.  Ideally
 a private network, and accessible only over VPN.  The `username` and `password` combination for logging in can
 be controlled via environment variables.
 
+## Build
+Wt is the primary dependency for building the project.
+
+### Install Wt
+Install Wt and the dependencies needed by Wt.
+
+<code-block lang="Shell" collapsible="true">
+#!/bin/ksh
+
+DEST='/usr/local/wt'
+
+if [ -d $DEST ]
+then
+  sudo rm -rf $DEST
+fi
+
+cd /tmp
+
+if [ -d wt ]
+then
+  rm -rf wt
+fi
+
+git clone --branch 4.11.4 https://github.com/emweb/wt.git
+cd wt
+CXXFLAGS='-I/opt/homebrew/opt/openssl/include -Wno-deprecated-declarations' LDFLAGS='-L/opt/homebrew/opt/openssl/lib' cmake \
+  -DAPPLE=true \
+  -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DBOOST_ROOT=/usr/local/boost \
+  -DBoost_USE_STATIC_RUNTIME=ON \
+  -DBoost_USE_MULTITHREADED=ON \
+  -DSHARED_LIBS=OFF \
+  -DENABLE_HARU=ON \
+  -DHARU_PREFIX=/opt/homebrew/opt/libharu \
+  -DENABLE_PANGO=OFF \
+  -DENABLE_OPENGL=OFF \
+  -DBUILD_EXAMPLES=OFF \
+  -DINSTALL_EXAMPLES=ON \
+  -DINSTALL_RESOURCES=ON \
+  -DINSTALL_THEMES=ON \
+  -DENABLE_UNWIND=ON \
+  -DMULTI_THREADED=ON \
+  -DENABLE_LIBWTTEST=OFF \
+  -DEXAMPLES_DESTINATION=examples \
+  -DCMAKE_INSTALL_PREFIX=$DEST \
+  -B build -S .
+cmake --build build -j12 && sudo cmake --install build)
+</code-block>
+
+### Install Application
+Check out the sources and use `cmake` to build the application.
+
+```shell
+git clone https://github.com/sptrakesh/apm-viewer.git
+cd apm-viewer
+cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
+cmake --build build --parallel
+docker/build.sh # builds docker image locally
+```
+
+Run the application using a command similar to the following:
+```shell
+cd <path to>/apm-viewer
+(cd build/src; ./apm-app --docroot ../../resources/docroot --approot ../../resources/approot --http-port 8000 --http-address 0.0.0.0 --resources-dir /usr/local/wt/share/Wt/resources --deploy-path /a -c ../../resources/wt_config.xml)
+```
+
 ## Docker
 A docker [image](https://hub.docker.com/r/sptrakesh/apm-app) is available for the web application.
 
