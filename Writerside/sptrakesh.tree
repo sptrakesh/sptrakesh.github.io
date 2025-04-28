@@ -57,6 +57,7 @@
     <toc-element topic="mmdb.md"/>
   <toc-element topic="Articles.md">
       <toc-element topic="Application-Performance-Management.md">
+        <toc-element topic="APM-Web-Application.md"/>
         <toc-element topic="APM-Desktop-Viewer.md"/>
         <toc-element topic="APM-Sample-Data.md"/>
       </toc-element>
