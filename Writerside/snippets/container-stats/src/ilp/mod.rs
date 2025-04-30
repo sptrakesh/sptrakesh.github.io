@@ -9,7 +9,7 @@ use questdb::{
 use chrono::Utc;
 
 use super::Cli;
-use super::stats::{Stats, Measurement};
+use super::stats::{Measurement, Stats, IO};
 
 pub fn publish(cli: &Cli, stats: &Vec<Stats>) -> Result<()>
 {
@@ -22,13 +22,20 @@ pub fn publish(cli: &Cli, stats: &Vec<Stats>) -> Result<()>
   let mut sender = Sender::from_conf(uri)?;
   let mut buffer = Buffer::new();
   
-  fn add_io(buffer: &mut Buffer, measurement: &Measurement, prefix: &str)
+  fn add_io(buffer: &mut Buffer, io: &IO, prefix: &str)
   {
-    if measurement.unit == "B" { buffer.column_f64(prefix, measurement.value as f64).expect("Failed to add IO B"); }
-    else if measurement.unit == "KB" { buffer.column_f64(prefix, (measurement.value * 1024.0)  as f64).expect("Failed to add IO KB"); }
-    else if measurement.unit == "MB" { buffer.column_f64(prefix, (measurement.value * 1024.0 * 1024.0)  as f64).expect("Failed to add IO MB"); }
-    else if measurement.unit == "GB" { buffer.column_f64(prefix, (measurement.value * 1024.0 * 1024.0 * 1024.0)  as f64).expect("Failed to add IO GB"); }
-    buffer.column_str(format!("{}_unit", prefix).as_str(), "bytes").expect("Failed to add IO unit");
+    fn bytes(measurement: &Measurement) -> f64
+    {
+      if measurement.unit == "KB" { return (measurement.value * 1024.0) as f64; }
+      else if measurement.unit == "MB" { return (measurement.value * 1024.0 * 1024.0)  as f64; }
+      else if measurement.unit == "GB" { return (measurement.value * 1024.0 * 1024.0 * 1024.0)  as f64; }
+      measurement.value as f64
+    }
+    
+    buffer.column_f64(format!("{}_in", prefix).as_str(), bytes(&io.incoming)).expect(format!("Failed to add incoming {} IO", prefix).as_str());
+    buffer.column_str(format!("{}_in_unit", prefix).as_str(), "bytes").expect(format!("Failed to add IO {} unit", prefix).as_str());
+    buffer.column_f64(format!("{}_out", prefix).as_str(), bytes(&io.outgoing)).expect(format!("Failed to add outgoing {} IO", prefix).as_str());
+    buffer.column_str(format!("{}_out_unit", prefix).as_str(), "bytes").expect(format!("Failed to add IO {} unit", prefix).as_str());
   }
   
   fn add_memory(buffer: &mut Buffer, measurement: &Measurement, prefix: &str)
