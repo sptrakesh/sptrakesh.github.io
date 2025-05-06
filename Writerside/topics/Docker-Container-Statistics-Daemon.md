@@ -31,14 +31,15 @@ The following arguments are supported for running the process.  Of these the
   amount of data stored in QuestDB).
 * `-w|--watchdog` *Linux only!*.  Enable or disable `systemd watchdog` notifications.
   If enabled, the systemd service unit **must** have `WatchdogSec` set.
-  * `enabled` The default option.  Enabled sending watchdog notifications at the
+  * `enabled` The default option.  Enable sending watchdog notifications at the
     recommended interval of roughly half the configured timeout value.
   * `disabled` Disable sending watchdog notifications.  This turns off all interactions
   with `libsystemd`.  Primarily meant to be used when the process is controlled via
   traditional [shell scripts](#alternate) or similar mechanisms, and not under `systemd`.
-* `-d|--disks` Optional list of disk names for which disk usage statistics are
-  to be captured.  Specify multiple times for multiple disks. `--disks "/dev/nvme0n1p1" --disks "/dev/nvme2n1"`
-* `-b|--disk-table` The series name to publish disk information to.  Defaults to `diskStats`.
+* `-b|--block-device` Optional list of disk/volume/block device names for which disk 
+  usage statistics are to be captured.  Specify multiple times for multiple disks.
+  `--block-device '/dev/nvme0n1p1' --block-device '/dev/nvme2n1'`
+* `-d|--disk-table` The series name to publish disk information to.  Defaults to `diskStats`.
 
 ### Environment Variables
 Process log level can be controlled using the standard `RUST_LOG` variable.  Process
