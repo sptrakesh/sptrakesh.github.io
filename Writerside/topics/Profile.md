@@ -3,7 +3,7 @@ View/download my [resume](https://1drv.ms/b/c/85539589e6f5a6fd/Ef2m9eaJlVMggIWxb
 
 ## Professional Expertise
 * Polyglot developer with expertise in C++, Go,
-Java/Groovy/Scala, JavaScript, Objective-C, Python, Julia and Swift
+Java/Groovy/Scala, JavaScript, Objective-C, Python, Rust, Julia and Swift
 * NoSQL (Content, Document, Key-Value, and Timeseries
 databases) and RDBMS experience
 * 26+ years of software engineering experience
@@ -11,13 +11,13 @@ databases) and RDBMS experience
 design, implementation, testing, deployment and support)
 
 ## Skills
-* **Programming** - C++, Go, Java/Scala, Objective-C, Swift
+* **Programming** - C++, Go, Java, Rust, Objective-C, Swift
 * **GUI Development** - Qt, Cocoa/iOS UIKit, Android, Wt
-* **Scripting** - Groovy, JavaScript, Julia, Python, SQL, Bourne/Korn Shell
+* **Scripting** - Groovy, JavaScript, Julia, Python, SQL, Shell
 * **DBMS** - [MongoDB](mongo-service.md), Google Data Store, HBase/Hypertable,
   PostgreSQL, MySQL, SQLite, [RocksDB](Config-Db.md), Redis, Java Object Databases,
   [Java Content Repository](https://github.com/sptrakesh/jcrmanager)
-* **Serialisation Formats** - BSON, JSON, GraphQL, Apache Avro and Thrift, SOAP, XML Schema
+* **Serialisation Formats** - BSON, Flatbuffers, JSON, GraphQL, YAML, Apache Avro and Thrift
 
 ## Work Experience
 I have split my work experience into two parts - recent and old. Recent

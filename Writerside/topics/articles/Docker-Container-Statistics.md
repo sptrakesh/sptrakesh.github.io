@@ -55,6 +55,7 @@ Unit=container-stats.service
 WantedBy=timers.target
 ```
 
+<snippet id="docker-stats-table"> 
 ## QuestDB Table
 The table schema as generated from the ILP data is shown below.
 ```
@@ -69,20 +70,15 @@ qdb=> show columns from containerStats;
  memory_percentage | DOUBLE    | f       |                  0 | f            |              0 | f          | f
  pids              | LONG      | f       |                  0 | f            |              0 | f          | f
  memory_use        | DOUBLE    | f       |                  0 | f            |              0 | f          | f
- memory_use_unit   | VARCHAR   | f       |                  0 | f            |              0 | f          | f
  total_memory      | DOUBLE    | f       |                  0 | f            |              0 | f          | f
- total_memory_unit | VARCHAR   | f       |                  0 | f            |              0 | f          | f
  timestamp         | TIMESTAMP | f       |                  0 | f            |              0 | t          | f
  block_io_in       | DOUBLE    | f       |                256 | f            |              0 | f          | f
- block_io_in_unit  | VARCHAR   | f       |                256 | f            |              0 | f          | f
  block_io_out      | DOUBLE    | f       |                256 | f            |              0 | f          | f
- block_io_out_unit | VARCHAR   | f       |                256 | f            |              0 | f          | f
  net_io_in         | DOUBLE    | f       |                256 | f            |              0 | f          | f
- net_io_in_unit    | VARCHAR   | f       |                256 | f            |              0 | f          | f
  net_io_out        | DOUBLE    | f       |                256 | f            |              0 | f          | f
- net_io_out_unit   | VARCHAR   | f       |                256 | f            |              0 | f          | f
-(20 rows)
+(14 rows)
 ```
+</snippet>
 
 ## Grafana
 A simple dashboard was created to view services and processes that we run.  Additional

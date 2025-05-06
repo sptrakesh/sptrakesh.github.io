@@ -27,9 +27,8 @@ View/download my [resume](https://1drv.ms/b/c/85539589e6f5a6fd/Ef2m9eaJlVMggIWxb
   operations I have used on a few projects for companies I worked for.
 * [OpenAPI2LaTeX](OpenAPI-to-LaTeX.md) [Utility](https://github.com/sptrakesh/openapi2latex)
   for generating a LaTeX file representing the information in an OpenAPI specification.
-* [container-stats](Docker-Container-Statistics.md) A simple utility to publish
-  docker [container stats](https://gist.github.com/sptrakesh/1a8534d5aae3a526f5d38930c82d14e9)
-  to QuestDB.
+* [Docker Container Statistics Daemon](Docker-Container-Statistics-Daemon.md) A simple utility to publish
+  docker [container-statistics](https://github.com/sptrakesh/container-statsd) to QuestDB.
 
 ## Articles
 <include from="Articles.md" element-id="article-links"/>
