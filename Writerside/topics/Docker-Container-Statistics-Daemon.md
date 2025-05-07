@@ -24,11 +24,16 @@ The following arguments are supported for running the process.  Of these the
     use this option, as I am more interested in seeing the spikes or worst cases scenarios
     being reported than in the averaged numbers.
 * `-q|--questdb` The QuestDB host to publish to.  Defaults to `localhost`.
-* `-t|--table` The series name to publish to.  Defaults to `containerStats`.
+* `-s|--stats-table` The series name to publish to.  Defaults to `containerStats`.
 * `-i|--interval` The interval in minutes for which statistics are aggregated.
   Defaults to `5` minutes.  Must be between `1` and `15` (I do not think larger
   values are useful, and there is not that much benefit in trying to reduce the
   amount of data stored in QuestDB).
+* `-t|--transport-protocol` The QuestDB ILP transport protocol to use.  Default `tcp`.
+  * `tcp` Publish to QuestDB over TCP/IP.
+  * `http` Publish to QuestDB over HTTP.
+  * `https` Publish to QuestDB over HTTPS.
+* `-p|--port` The port on which the QuestDB ILP service is listening.  Default `9009`.
 * `-w|--watchdog` *Linux only!*.  Enable or disable `systemd watchdog` notifications.
   If enabled, the systemd service unit **must** have `WatchdogSec` set.
   * `enabled` The default option.  Enable sending watchdog notifications at the
@@ -63,7 +68,7 @@ cp /opt/statsd/bin/container-statsd /tmp/mount/
 ```
 
 ## Run
-Service will typically be run as a *service* through *systemd*.  The service
+The process will typically be run as a *service* through *systemd*.  The service
 [unit](https://github.com/sptrakesh/container-statsd/blob/main/systemd/container-statsd.service)
 sample file can be used as a template for setting up the service.
 
@@ -76,6 +81,10 @@ download on to our EC2 hosts and run via `systemd`.
 enabled as a *lingering user*.  If not, services started by the user will not
 survive the user logging out.  This will also trigger an infinite stop/start
 loop for the service (unless you configure the maximum number of restarts).
+
+**Note:** The process publishes data using **ILP** over `TCP/IP`.  The QuestDB `TCP`
+port (default `9009`) must be open and accessible from the hosts where the
+process is installed.
 
 ```shell
 sudo loginctl enable-linger <username>
@@ -98,6 +107,32 @@ You can have a *systemd timer* check the process and restart if not running (we 
 yet to run into an issue with the process aborting).
 
 <include from="Docker-Container-Statistics.md" element-id="docker-stats-table"/>
+
+### Disk Statistics Table
+The optional disk statistics that are captured has the following schema:
+
+```shell
+qdb=> show columns from diskstats;
+     column      |   type    | indexed | indexBlockCapacity | symbolCached | symbolCapacity | designated | upsertKey
+-----------------+-----------+---------+--------------------+--------------+----------------+------------+-----------
+ host            | SYMBOL    | f       |                  0 | t            |           1024 | f          | f
+ name            | SYMBOL    | f       |                  0 | t            |           1024 | f          | f
+ file_system     | SYMBOL    | f       |                  0 | t            |           1024 | f          | f
+ mount_point     | SYMBOL    | f       |                  0 | t            |           1024 | f          | f
+ type            | SYMBOL    | f       |                  0 | t            |           1024 | f          | f
+ available_space | LONG      | f       |                  0 | f            |              0 | f          | f
+ read_bytes      | LONG      | f       |                  0 | f            |              0 | f          | f
+ write_bytes     | LONG      | f       |                  0 | f            |              0 | f          | f
+ timestamp       | TIMESTAMP | f       |                  0 | f            |              0 | t          | f
+ percentage_use  | DOUBLE    | f       |                256 | f            |              0 | f          | f
+(10 rows)
+```
+
+**Note:** The `percentage_use` column is *mis-named*.  This column captures the
+percentage of *available* space against the *total* space.  Hence, this column
+captures the percentage available, and **not** the percentage *used*.  When
+plotting the data, you will need to do a (100.0 - percentage_use) computation
+in the query.
 
 The image below shows IO (block device and network) statistics captured from
 background processes (daemon and periodic) that run on our system.
