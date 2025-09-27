@@ -57,9 +57,14 @@ which the embedded converter does not support. This sample was generated using t
 ## Usage
 The generator is written in C++ and has a dependency on the [Boost](https://boost.org/) libraries.
 
+Pre-built binaries for Mac OS and Windows are available on the [releases](https://github.com/sptrakesh/openapi2latex/releases) page.
+
 **Note:** The old [Julia](https://julialang.org/) version of the utility is still available in the `julia` branch.
 
-## Install Dependencies
+### Build project
+To build the project install Boost and then checkout and build the project.
+
+#### Install Dependencies
 
 <tabs id="openapi-latex-build">
   <tab title="Mac OS" id="build-boost-macosx">
@@ -69,8 +74,6 @@ The generator is written in C++ and has a dependency on the [Boost](https://boos
     <include from="boost.topic" element-id="boost-windows"/>
   </tab>
 </tabs>
-
-### Build project
 
 ```shell
 git clone https://github.com/sptrakesh/openapi-latex.git
@@ -83,7 +86,7 @@ cmake --build build -j12
 sudo cmake --install build
 ```
 
-## Command Line Options
+### Command Line Options
 The following options are supported by the 
 [main.cpp](https://github.com/sptrakesh/openapi2latex/blob/master/src/main.cpp) executable:
 
@@ -105,6 +108,32 @@ The following options are supported by the
 * `--console | -c` - Flag to indicate logs should also be echoed to `stdout`.
 * `--log-dir | -d` - The directory under which the process log output is written.
   The directory *must* exist. Default `/tmp/` - note the mandatory trailing `/`.
+
+#### Example
+The following options were used to generate the sample petstore specifications document.
+```shell
+/usr/local/spt/bin/oa2tex \
+  -i /tmp/petstore-official.yaml \
+  -o /tmp/petstore \
+  -s -c --use-cmark
+```
+
+#### Docker
+A docker image is available for those who do not wish to build/install the utility on their computer.
+Use docker mounts to hold the source specification files as well as the destination output files. Once
+the output LaTeX files are generated, run `pdflatex` as appropriate.
+
+**Note:** `cmark` *is* installed in the docker image.
+
+A sample invocation is as follows:
+```shell
+docker run --rm -it \
+  -v $PWD/tmp/test:/tmp/test \
+  sptrakesh/openapi-latex \
+  -i /tmp/test/docs/openapi.yaml \
+  -o /tmp/test/specs \
+  -s -m -c
+```
 
 ## Extensions
 A few extensions to the specifications developed by [Redocly](https://redocly.com/) are supported.
