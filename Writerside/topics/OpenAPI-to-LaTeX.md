@@ -2,8 +2,8 @@
 
 I developed this as a testbed while familiarising myself with 
 [Julia](https://julialang.org/).  A couple of companies I assisted also had a need for 
-attaching API specifications with their customer contracts. The result of these needs 
-is this project.
+attaching API specifications with their customer contracts. The result of these 
+needs is this project.
 
 **Note:** I have since enhanced and rewritten the process in C++.  The old julia
 implementation is still available in the [julia](https://github.com/sptrakesh/openapi2latex/tree/julia) branch.
@@ -11,6 +11,8 @@ implementation is still available in the [julia](https://github.com/sptrakesh/op
 The primary rationale for this utility is to be able to generate a PDF document that can 
 be distributed to interested parties, when the source specifications are protected by access 
 control (and where the said parties do not need to be provided with the access credentials).
+I have used the tool to create specification documents that have been included in
+customer contracts for a few companies that I have worked with.
 
 The workflow is to use this process to generate the target LaTeX file, and run 
 `pdflatex` a few times (usually two times to get cross-references resolved) for 
