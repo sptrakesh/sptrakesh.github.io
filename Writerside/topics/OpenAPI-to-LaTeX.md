@@ -151,28 +151,31 @@ A few extensions to the specifications developed by [Redocly](https://redocly.co
 Probably too many to list, but the following items should be kept in mind.
 
 * This utility is based on the way *I write API specifications*, and markup descriptions.
-* Schema objects are assumed to model closely their organisation in a source code implementation. This in turn implies that nested structures are represented as schema references, and not listed in-line in the schema. Deeply nested in-line schemas would be very hard to represent in a printed document in any case.
+* Schema objects are assumed to model closely their organisation in a source code implementation.
+  This in turn implies that nested structures are represented as schema references, and not
+  listed in-line in the schema. Deeply nested in-line schemas would be very hard to represent
+  in a printed document in any case.
 * Mainly tested with specifications that are split into individual files - representing 
   paths, schemas, parameters etc. Most testing has been against large handwritten specifications,
   which follows the principles laid out in [split specifications](https://davidgarcia.dev/posts/how-to-split-open-api-spec-into-multiple-files/).
   A few simple single file specifications have also been tested.
 * Mainly supports OpenAPI specification version [3.0.3](https://spec.openapis.org/oas/v3.0.3),
   although some properties from [3.1.0](https://spec.openapis.org/oas/latest.html) are also 
-  included. In particular, schemas are expected in `3.0.3` format.
+  included.
 * Only supports loading local specification files in **YAML** format. **JSON** is not 
   supported at present.
 * Not all properties/aspects of the specification are output in the generated LaTeX file. 
   I selected what I felt are most relevant to be shared.
-* Markdown markup may not be fully translated to LaTeX. See [runtests.jl](https://github.com/sptrakesh/openapi2latex/blob/master/runtests.jl)
+* Markdown markup may not be fully translated to LaTeX. See [convert.cpp](https://github.com/sptrakesh/openapi2latex/blob/master/tests/convert.cpp)
   for basic rules implemented.
   * Bold/italic blocks of text (spanning paragraphs) are not supported.
 
-The output is a LaTeX file, and hence can be easily modified as needed to further 
-customise the final PDF document.
+The output is a wrapping LaTeX file that includes several smaller included files,
+and hence can be easily modified as needed to further customise the final PDF document.
 
 ## Dependencies
 * **[rapidyaml](https://github.com/biojppm/rapidyaml)** YAML parser library. Via `cmake fetchcontent`
-* **[Boost](https://boost.org/)** expected local installation.
+* **[Boost](https://boost.org/)** local installation required.
 * **[Clara](https://github.com/catchorg/Clara)** - Command line options parser. Included in project.
 * **[Catch2](https://github.com/catchorg/Catch2)** - Testing framework. Via `cmake fetchcontent`
 * **[NanoLog](https://github.com/Iyengar111/NanoLog)** - Logging framework used for the project. Modified version included in project.
