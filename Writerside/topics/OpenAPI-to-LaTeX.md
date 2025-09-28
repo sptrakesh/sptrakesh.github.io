@@ -41,17 +41,18 @@ file as desired):
   * **Schemas** - Part with the *schemas* declared and referenced in the specification. 
     Each *schema* is presented in a *chapter*. Schemas are listed alphabetically by their 
     filename and entity name.
-  * **Responses** - Optional part with responses declared in the openapi.components structure. If none are defined no part is created.
+  * **Responses** - Optional part with responses declared in the `openapi.components` structure. If 
+    none are defined no part is created.
   * **Request Bodies** - Part with request bodies that are referenced, not if they are defined inline with schema references.
   * **Code Samples** - If the `x-codeSamples` extension exists for operations, these are 
-    collected together into a third part. Code samples are grouped together under each 
+    collected together into another part. Code samples are grouped together under each 
     tag group, which is presented as a *chapter*.
 * **Backmatter** - List of *tables*.
   * **Index** - Operation ids and schema property names are added to index. 
 
 See [openapi.pdf](https://github.com/sptrakesh/openapi2latex/blob/master/openapi.pdf)
 for the PDF generated from the official [petstore](https://github.com/SLdragon/example-openapi-spec/blob/main/petstore-official.yaml)
-specifications. Note that the petstore sample has a markdown table in the information,
+specifications. Note that the petstore sample has a commonmark table in the information,
 which the embedded converter does not support. This sample was generated using the 
 `cmark` option. The `cmark` generated `latex` table has some issue, and I had to run
 `latex` in `nonstopmode` for the PDF to be generated.
@@ -104,7 +105,7 @@ The following options are supported by the
   as section headings instead of *operationId*.
 * `--use-cmark | -m` - Use [cmark](https://github.com/commonmark/cmark) to convert `info.description`
   to latex. Recommended option, since the description can be quite long and complicated,
-  and `cmark` should have much more comprehensive support for converting markdown to 
+  and `cmark` should have much more comprehensive support for converting commonmark to 
   latex. Note the program uses the `cmark` utility via `std::system`, and not the library.
 * `--log-level | -l` - Set the logging level (`critical|warn|info|debug`). Default `info`.
 * `--console | -c` - Flag to indicate logs should also be echoed to `stdout`.
@@ -146,6 +147,11 @@ A few extensions to the specifications developed by [Redocly](https://redocly.co
 * Tag groups are parsed from the `x-tagGroups` array attached to the root of the specification 
   document. If specified, an initial chapter **Tag Groups** is added, which lists the groupings 
   with links to the Tag chapters.
+* An additional custom extension for documenting the *version* from which an API operation
+  or schema or property has been added is supported in the form of `x-since-version`.  The
+  generated LaTeX files will include this information if so annotated in the API specifications.
+  Example: `x-since-version: 2.6.8`
+  * Document for **Operations** and **Schemas**. 
 
 ## Limitations
 Probably too many to list, but the following items should be kept in mind.
