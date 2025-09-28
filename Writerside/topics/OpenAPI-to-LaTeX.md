@@ -166,7 +166,7 @@ Probably too many to list, but the following items should be kept in mind.
   supported at present.
 * Not all properties/aspects of the specification are output in the generated LaTeX file. 
   I selected what I felt are most relevant to be shared.
-* Markdown markup may not be fully translated to LaTeX. See [convert.cpp](https://github.com/sptrakesh/openapi2latex/blob/master/tests/convert.cpp)
+* Markdown markup may not be fully translated to LaTeX. See [convert.cpp](https://github.com/sptrakesh/openapi2latex/blob/master/test/convert.cpp)
   for basic rules implemented.
   * Bold/italic blocks of text (spanning paragraphs) are not supported.
 
