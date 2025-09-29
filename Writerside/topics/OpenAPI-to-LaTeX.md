@@ -151,7 +151,12 @@ A few extensions to the specifications developed by [Redocly](https://redocly.co
   or schema or property has been added is supported in the form of `x-since-version`.  The
   generated LaTeX files will include this information if so annotated in the API specifications.
   Example: `x-since-version: 2.6.8`
-  * Document for **Operations** and **Schemas**. 
+  * Document for **Operations** and **Schemas**.  See sample screen captures of operation
+    version and schema version as rendered in a PDF
+
+<img src="operation-since-version.png" alt="Operation Version" thumbnail="false"/>
+
+<img src="schema-since-version.png" alt="Operation Version" thumbnail="false"/>
 
 ## Limitations
 Probably too many to list, but the following items should be kept in mind.
