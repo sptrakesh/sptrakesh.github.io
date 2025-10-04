@@ -38,9 +38,9 @@ file as desired):
   *Helvetica Neue* (`\setmainfont[Ligatures=TeX,Numbers=OldStyle]{Helvetica Neue}`).  Change to any system
   supported font as desired (through the command line option or by editing file as desired after generating the
   latex sources).
-  * Serif fonts like *Helvetica*, *Verdana* etc. are good for viewing the PDF on screen.
-  * Use traditional print friendly fonts like the LaTeX default *Computer Modern*, *Times New Roman* etc if
-    the primary purpose of the output PDF is print.
+  * Sans-serif fonts like *Helvetica*, *Verdana*, *Calibri* ... are good for viewing the PDF on screen.
+  * Use traditional print friendly serif fonts like the LaTeX default *Computer Modern*, *Times New Roman*,
+    Garamond ... if the primary purpose of the output PDF is print.
   * See [examples](#petstore-samples) of the Petstore document with different fonts.
 * **Frontmatter** - Titlepage and table of contents.
 * **Mainmatter** - Contains two or three parts.
@@ -215,6 +215,18 @@ different fonts.
   <tab title="Computer Modern Roman" id="petstore-samples-cmr">
     Document generated using the default *Computer Modern Roman* font.
     <img src="petstore-cmr.png" alt="Computer Modern Roman" thumbnail="true"/>
+  </tab>
+  <tab title="Merriweather" id="petstore-samples-merriweather">
+    Document generated using the default *Computer Modern Roman* font.
+    <img src="petstore-merriweather.png" alt="Merriweather" thumbnail="true"/>
+  </tab>
+  <tab title="Merriweather Light" id="petstore-samples-merriweather-light">
+    Document generated using the default *Computer Modern Roman* font.
+    <img src="petstore-merriweather-light.png" alt="Merriweather Light" thumbnail="true"/>
+  </tab>
+  <tab title="Sabon" id="petstore-samples-sabon">
+    Document generated using the default *Computer Modern Roman* font.
+    <img src="petstore-sabon.png" alt="Sabon" thumbnail="true"/>
   </tab>
 </tabs>
 
