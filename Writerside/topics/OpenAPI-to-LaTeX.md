@@ -38,11 +38,12 @@ file as desired):
   *Helvetica Neue* (`\setmainfont[Ligatures=TeX,Numbers=OldStyle]{Helvetica Neue}`).  Change to any system
   supported font as desired (through the command line option or by editing file as desired after generating the
   latex sources).
-  * Sans-serif fonts like *Helvetica*, *Verdana*, *Calibri* ... are good for viewing the PDF on screen.
-  * Use traditional print friendly serif fonts like the LaTeX default *Computer Modern*, *Times New Roman*,
-    Garamond ... if the primary purpose of the output PDF is print.
-  * You can also use modern serif fonts such as *Merriweather*, *Sabon* ... which were designed for both
-    appearance in print and digital display.
+  * Sans-serif fonts like *Helvetica*, *Verdana*, *Calibri* ... are good for digital display of the PDF.
+  * Use traditional print friendly serif fonts like the LaTeX default *Computer Modern* (comment out
+    the `\setmainfont` directive), *Times New Roman*, Garamond ... if the primary purpose of 
+    the output PDF is print.
+  * You can also use modern variants of serif fonts such as *Merriweather*, *Sabon* ... which were 
+    designed for both print and digital display.
   * See [examples](#petstore-samples) of the Petstore document with different fonts.
 * **Frontmatter** - Titlepage and table of contents.
 * **Mainmatter** - Contains two or three parts.
@@ -219,19 +220,19 @@ different fonts.
     <img src="petstore-cmr.png" alt="Computer Modern Roman" thumbnail="true"/>
   </tab>
   <tab title="Merriweather" id="petstore-samples-merriweather">
-    Document generated using the default *Computer Modern Roman* font.
+    Document generated using the classic *Merriweather* font.
     <img src="petstore-merriweather.png" alt="Merriweather" thumbnail="true"/>
   </tab>
   <tab title="Merriweather Light" id="petstore-samples-merriweather-light">
-    Document generated using the default *Computer Modern Roman* font.
+    Document generated using *Merriweather Light* font.
     <img src="petstore-merriweather-light.png" alt="Merriweather Light" thumbnail="true"/>
   </tab>
   <tab title="Sabon" id="petstore-samples-sabon">
-    Document generated using the default *Computer Modern Roman* font.
+    Document generated using classic *Sabon* font.
     <img src="petstore-sabon.png" alt="Sabon" thumbnail="true"/>
   </tab>
   <tab title="Sabon eText" id="petstore-samples-sabon-etext">
-    Document generated using the default *Computer Modern Roman* font.
+    Document generated using modern *Sabon eText* font.
     <img src="petstore-sabon-etext.png" alt="Sabon eText" thumbnail="true"/>
   </tab>
 </tabs>
