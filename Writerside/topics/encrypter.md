@@ -1,4 +1,5 @@
 # Encrypter
+<show-structure for="chapter,tab"/>
 Simple applications for encrypting or decrypting values using AES-256-CBC.
 Utility applications and a TCP/IP service are available.
 
@@ -76,7 +77,14 @@ sudo cmake --install build
 </code-block>
 
 ### API Usage
-The [API](https://github.com/sptrakesh/encrypter/blob/master/src/api/api.hpp) can be used to communicate with the encrypter TCP service.  Client code bases
+
+A simple API is provided for interacting with the service, without the caller needing
+to know about the network or serialisation protocols.
+
+<tabs id="encrypter-api">
+  <tab title="C++" id="encrypter-api-cpp">
+The <a href="https://github.com/sptrakesh/encrypter/blob/master/src/api/api.hpp">API</a>
+can be used to communicate with the encrypter TCP service.  Client code bases
 can use cmake to use the library.
 
 <code-block lang="shell" collapsible="true">
@@ -89,7 +97,7 @@ cmake -DCMAKE_PREFIX_PATH=/usr/local/boost -DCMAKE_PREFIX_PATH=/usr/local/spt -S
 cmake --build build -j12
 </code-block>
 
-<code-block lang="c++" collapsible="true">
+<code-block lang="c++" collapsible="false">
 <![CDATA[
 #include <encrypter/api/api.hpp>
 
@@ -101,6 +109,53 @@ int main()
 }
 ]]>
 </code-block>
+  </tab>
+  <tab title="Rust" id="encrypter-api-rust">
+A rust wrapper around the C++ API using <a href="https://cxx.rs/">cxx.rs</a> is available.  See
+the <a href="https://github.com/sptrakesh/encrypter/tree/master/client/rust">documentation</a>
+for details.
+
+<code-block lang="rust" collapsible="false">
+<![CDATA[
+use encrypter::{decrypt, encrypt, init, Configuration, LogLevel};
+
+#[test]
+fn round_trip()
+{
+let mut conf = Logger::new("/tmp/", "encrypter-rust");
+conf.level = LogLevel::DEBUG;
+init_logger(conf);
+
+init(Configuration::new("localhost", 2030));
+
+let data =  "https://sptrakesh.github.io/encrypter.html";
+let res = encrypt(data);
+assert!(!res.is_empty());
+assert_ne!(res.as_str(), data);
+let res = decrypt(res.as_str());
+assert_eq!(res, data);
+}
+]]>
+</code-block>
+  </tab>
+  <tab title="Python" id="encrypter-api-python">
+A python client is available.  See the 
+<a href="https://github.com/sptrakesh/encrypter/tree/master/client/python">documentation</a>
+for details.
+
+<code-block lang="python" collapsible="false">
+<![CDATA[
+from encrypter import Client as _EClient
+
+async with _EClient(host="encrypter") as client:
+    text = "https://github.com/sptrakesh/encrypter/blob/master/client/python/features/steps/service.py"
+    encrypted = await client.encrypt(data=text)
+    decrypted = await client.decrypt(data=encrypted)
+    assert(encrypted == decrypted)
+]]>
+</code-block>
+  </tab>
+</tabs>
 
 ## Docker
 Docker image with the service and utility is [available](https://hub.docker.com/repository/docker/sptrakesh/encrypter).

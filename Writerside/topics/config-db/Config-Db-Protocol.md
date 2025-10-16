@@ -1,4 +1,5 @@
 # Protocol
+<show-structure for="chapter,tab"/>
 
 Service supports both TCP/IP and HTTP/2 connections. The TCP service uses 
 [flatbuffers](https://google.github.io/flatbuffers/) as the data interchange format, while 
@@ -172,13 +173,94 @@ Service will echo the message back to the client. Examples include `ping`, `noop
 ## API
 
 A high-level client API to interact with the service is provided. The interface hides the 
-complexities involved with making TCP/IP requests using flatbuffers. The 
-[api](https://github.com/sptrakesh/config-db/blob/master/src/api/api.hpp) presents an 
-interface that is very similar to the persistence interface used internally by the service. The API maintains a connection pool to the service and performs the required interactions using the flatbuffer models.
+complexities involved with making TCP/IP requests using flatbuffers. 
+
+<tabs id="configdb-api">
+  <tab title="C++" id="configdb-api-cpp">
+The <a href="https://github.com/sptrakesh/config-db/blob/master/src/api/api.hpp">api</a> presents an 
+interface that is very similar to the persistence interface used internally by the
+service. The API maintains a connection pool to the service and performs the 
+required interactions using the flatbuffer models.
 
 **Note:** API must be initialised via the `init` function before first use.
 
-See [integration test](https://github.com/sptrakesh/config-db/blob/master/test/integration/apicrud.cpp)
-for sample usage of the API. The *shell* application is built using the client API. See 
-[cmake](https://github.com/sptrakesh/config-db?tab=readme-ov-file#api-usage) for including 
+See <a href="https://github.com/sptrakesh/config-db/blob/master/test/integration/apicrud.cpp">integration test</a>
+for sample usage of the API. The *shell* application is built using the client API. See
+<a href="https://github.com/sptrakesh/config-db?tab=readme-ov-file#api-usage">cmake</a> for including
 the API in your cmake project.
+
+<code-block lang="c++" collapsible="false">
+<![CDATA[
+#include <log/NanoLog.hpp>
+#include <configdb/api/api.hpp>
+...
+  using namespace spt::configdb::api;
+  nanolog::set_log_level( nanolog::LogLevel::DEBUG );
+  nanolog::initialize( nanolog::GuaranteedLogger(), "/tmp/", "config-db-itest", false );
+  init( "localhost", "2022", false );
+
+  const auto status = set( "key"sv, "value"sv );
+  assert( status );
+
+  const auto value = get( key );
+  assert( value );
+  assert( *value == "value"sv );
+
+  const auto dstatus = remove( "key"sv );
+  assert( dstatus );
+]]>
+</code-block>
+  </tab>
+  <tab title="Rust" id="configdb-api-rust">
+A simple wrapper around the C++ API using <a href="https://cxx.rs/">cxx.rs</a>.
+See <a href="https://github.com/sptrakesh/config-db/tree/master/client/rust">documentation</a>
+for details.
+
+<code-block lang="Rust" collapsible="false">
+<![CDATA[
+use configdb::*;
+
+#[test]
+fn operations()
+{
+  let mut logger = Logger::new("/tmp/", "configdb-rust");
+  logger.level = LogLevel::DEBUG;
+  init_logger(logger);
+
+  let mut conf = Configuration::new("localhost", 2022);
+  conf.ssl = false;
+  init(conf);
+
+  let mut rd = RequestData::new("key", "value");
+  rd.expirationInSeconds = 60;
+  let result = set(&rd);
+  assert_eq!(result, true);
+
+  let result = get(rd.key.as_str());
+  assert!(result.is_ok());
+  assert_eq!(result.unwrap(), rd.value);
+
+  let result = ttl(format!("/{}", rd.key).as_str());
+  assert!(result > 0);
+
+  let result = remove(rd.key.as_str());
+  assert_eq!(result, true);
+}
+]]>
+</code-block>
+  </tab>
+  <tab title="Python" id="configdb-api-python">
+See <a href="https://github.com/sptrakesh/config-db/tree/master/client/python">documentation</a>
+for details.
+
+<code-block lang="Python" collapsible="false">
+<![CDATA[
+async with Client(host="localhost", port=2020) as client:
+    _key = "/key1/key2/key3"
+    res = await client.set(_key, "value")
+    res = await client.get(_key)
+    log.info(f"Read stored value: {res}")
+]]>
+</code-block>
+  </tab>
+</tabs>
