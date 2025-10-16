@@ -122,18 +122,18 @@ use encrypter::{decrypt, encrypt, init, Configuration, LogLevel};
 #[test]
 fn round_trip()
 {
-let mut conf = Logger::new("/tmp/", "encrypter-rust");
-conf.level = LogLevel::DEBUG;
-init_logger(conf);
+  let mut conf = Logger::new("/tmp/", "encrypter-rust");
+  conf.level = LogLevel::DEBUG;
+  init_logger(conf);
 
-init(Configuration::new("localhost", 2030));
+  init(Configuration::new("localhost", 2030));
 
-let data =  "https://sptrakesh.github.io/encrypter.html";
-let res = encrypt(data);
-assert!(!res.is_empty());
-assert_ne!(res.as_str(), data);
-let res = decrypt(res.as_str());
-assert_eq!(res, data);
+  let data =  "https://sptrakesh.github.io/encrypter.html";
+  let res = encrypt(data);
+  assert!(!res.is_empty());
+  assert_ne!(res.as_str(), data);
+  let res = decrypt(res.as_str());
+  assert_eq!(res, data);
 }
 ]]>
 </code-block>
