@@ -57,5 +57,6 @@ conform to the following document model:
 ## Clients
 Client libraries are provided for the following languages:
 * [C++](https://github.com/sptrakesh/mongo-service/tree/master/src/api)
+* [Rust](https://github.com/sptrakesh/mongo-service/tree/master/client/rust/README.md)
 * [Python](https://github.com/sptrakesh/mongo-service/tree/master/client/python)
 * [Julia](https://github.com/sptrakesh/mongo-service/tree/master/client/julia/MongoService)
