@@ -269,3 +269,5 @@ and hence can be easily modified as needed to further customise the final PDF do
 * **[Clara](https://github.com/catchorg/Clara)** - Command line options parser. Included in project.
 * **[Catch2](https://github.com/catchorg/Catch2)** - Testing framework. Via `cmake fetchcontent`
 * **[NanoLog](https://github.com/Iyengar111/NanoLog)** - Logging framework used for the project. Modified version included in project.
+* **[nestenum](Nested-Enumerate.md)** Simple LaTeX package for nested enumerations.
+  * Add to your local texmf tree.  For instance, on Mac OS, this is stored in `~/Library/texmf/tex/latex/nestenum.sty`.

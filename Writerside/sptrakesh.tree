@@ -52,7 +52,9 @@
       <toc-element topic="Video-Player.md"/>
     </toc-element>
     <toc-element topic="geocode.md"/>
-  <toc-element topic="OpenAPI-to-LaTeX.md"/>
+  <toc-element topic="OpenAPI-to-LaTeX.md">
+    <toc-element topic="Nested-Enumerate.md"/>
+  </toc-element>
   <toc-element topic="s3-proxy.md"/>
     <toc-element topic="mmdb.md"/>
   <toc-element topic="Docker-Container-Statistics-Daemon.md"/>
