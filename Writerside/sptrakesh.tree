@@ -59,6 +59,9 @@
     <toc-element topic="mmdb.md"/>
   <toc-element topic="Docker-Container-Statistics-Daemon.md"/>
   <toc-element topic="Articles.md">
+    <toc-element topic="Single-Sign-On.md">
+      <toc-element topic="Google-Workspace-OAuth2.md"/>
+    </toc-element>
     <toc-element topic="Docker-Container-Statistics.md"/>
     <toc-element topic="Application-Performance-Management.md">
         <toc-element topic="APM-Web-Application.md"/>
