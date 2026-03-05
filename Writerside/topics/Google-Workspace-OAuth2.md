@@ -336,7 +336,7 @@ for the user.
   cookie.setHttpOnly( true );
   if ( poidc::Data::instance().env != "local" ) cookie.setDomain( "<parent domain>" );
   cookie.setPath( "/"s );
-  cookie.setSameSite( poidc::Data::instance().env == "local" ? Wt::Http::Cookie::SameSite::Lax : Wt::Http::Cookie::SameSite::Strict );
+  cookie.setSameSite( Wt::Http::Cookie::SameSite::Lax );
 
   response.addHeader( "Set-Cookie", to_str( cookie ) );
   const auto location = m->redirectTo.empty() ? "/a"s : m->redirectTo;
