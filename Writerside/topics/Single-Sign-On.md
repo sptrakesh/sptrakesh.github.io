@@ -1,9 +1,9 @@
 # Single Sign On
 
-Some experiences implementing SSO using OIDC/OAuth2 protocols.  I recently had to implement
-SSO against Azure AD and Google Workspace for my company.  The web frontend was built
-using [Wt](https://www.webtoolkit.eu/wt), while the backend API is built using 
-[nghttp2_asio](nghttp2-framework.md).
+Some experiences implementing SSO using OIDC/OAuth2 [protocols](https://developer.okta.com/blog/2017/07/25/oidc-primer-part-1).
+I recently had to implement SSO against Azure AD and Google Workspace for my company.  
+The web frontend was built using [Wt](https://www.webtoolkit.eu/wt), while the backend API is 
+built using [nghttp2_asio](nghttp2-framework.md).
 
 ## Workflow
 I adopted the same workflow for implementing *authentication* against external

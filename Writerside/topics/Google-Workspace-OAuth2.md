@@ -217,7 +217,7 @@ use this information and avoid needing to make a request to the User Information
           u.metadata.user.id = bsoncxx::oid{ "5f70ee572fc09200086c8f23" };
           auto& p = u.properties.emplace_back();
           p.name = "idp";
-          p.value = "google-workspace";
+          p.value = oidc.idp;
 
           WRAP_CODE_LINE( const auto st = db::create( u, apm ); )
           if ( st != 200 )
