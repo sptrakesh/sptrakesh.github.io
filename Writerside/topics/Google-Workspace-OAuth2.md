@@ -3,7 +3,7 @@
 These are the steps I followed to implement OAuth2 authentication against Google Workspace.
 
 ## Client Set Up
-Setting up the client is a straightforward process.  I created a new project for my project,
+Setting up the client is a straightforward process.  I created a new project in Google Workspace,
 and then added the necessary clients under that project.
 
 * Log in to Google Workspace as an administrative user and create a new project.  I created
@@ -26,7 +26,7 @@ With these steps, I could move on to implementing the authentication flow.
 ## Authentication Flow
 I followed the steps [documented](https://www.echoapi.com/blog/mastering-oauth-2-0-a-step-by-step-guide-to-google-api-access/)
 and had very little trouble getting the authentication flow to work.  I was able to complete the
-entire development in a few hours.
+entire setup and development in a few hours.
 
 <img src="https://assets.echoapi.com/upload/user/223198648866324480/log/0ed0e2ca-617a-4df6-8ced-dc4501b445c2.png" alt="OAuth2 Flow"/>
 
@@ -82,7 +82,13 @@ authentication page.  We use the encrypted value of the document ID as the state
 the callback, we decrypt the state parameter and use it to retrieve the OIDC information record.
 
 ### Callback Handler
-The callback handler is implemented as a hidden endpoint in our API.
+The callback handler is implemented as a hidden endpoint in our API.  The handler performs the following tasks:
+* Parse the query parameters returned by Google OAuth2 service.
+* Retrieve the OIDC information record from the database.
+* Exchange the authorisation code for an access token.
+* Create an internal user if not existing.
+* Generate a JWT token for the internal user.
+* Redirect the user to Wt application with updated OIDC information.
 
 <tabs id="gw-callback">
   <tab title="Query Parameters" id="gw-callback-query">
@@ -91,27 +97,25 @@ The callback handler is implemented as a hidden endpoint in our API.
     <![CDATA[
         const auto params = boost::urls::parse_query( req.query );
 
-        std::string code{};
-        std::string state{};
-        for ( const auto& kv : params.value() )
+        const auto pvalue = [&params]( std::string_view key ) -> std::optional<std::string>
         {
+          const auto iter = params->find( key );
+          if ( iter == params->end() )
+          {
+            LOG_INFO << "Missing query parameter " << key;
+            return std::nullopt;
+          }
+
           auto ss = std::stringstream{};
-          ss << boost::urls::decode_view( kv.value );
+          ss << boost::urls::decode_view( iter->value );
+          return ss.str();
+        };
 
-          if ( kv.key == "code"sv ) code = ss.str();
-          else if ( kv.key == "state"sv ) state = ss.str();
-        }
+        const auto code = pvalue( "code"sv );
+        if ( !code ) return error( 400, "Missing query parameter"sv, nullptr, methods, req.header, apm );
 
-        if ( code.empty() )
-        {
-          LOG_INFO << "Missing query parameter code"sv;
-          return error( 400, "Missing query parameter"sv, nullptr, methods, req.header, apm );
-        }
-        if ( state.empty() )
-        {
-          LOG_INFO << "Missing query parameter state"sv;
-          return error( 400, "Missing query parameter"sv, nullptr, methods, req.header, apm );
-        }
+        const auto state = pvalue( "state"sv );
+        if ( !state ) return error( 400, "Missing query parameter"sv, nullptr, methods, req.header, apm );
     ]]>
     </code-block>
   </tab>
@@ -119,7 +123,7 @@ The callback handler is implemented as a hidden endpoint in our API.
     Retrieve the OIDC information record from the database.
     <code-block lang="C++" collapsible="false">
     <![CDATA[
-        auto id = util::Configuration::instance().decrypt( state );
+        auto id = util::Configuration::instance().decrypt( *state );
         auto oid = spt::util::parseId( id );
         if ( !oid )
         {
@@ -245,6 +249,7 @@ use this information and avoid needing to make a request to the User Information
         db::impl::clearSessions( *user, token, apm );
 
         oidc->jwtId = token.id;
+        oidc->metadata.modified = std::chrono::system_clock::now();
         WRAP_CODE_LINE( const auto _os = db::update( *oidc, ""sv, apm ); )
         if ( _os != 200 )
         {
@@ -260,8 +265,7 @@ use this information and avoid needing to make a request to the User Information
     <code-block lang="C++" collapsible="true">
     <![CDATA[
         auto endpoint = boost::urls::url( GWHolder::instance().success );
-        auto cleaned = boost::algorithm::replace_all_copy( state, "+", "_" );
-        auto encoded = boost::urls::param_pct_view( "nonce", cleaned );
+        auto encoded = boost::urls::param_pct_view( "nonce", *state );
         endpoint.encoded_params().append( encoded );
 
         LOG_INFO << "Writing response for " << req.path << "; redirecting to " << endpoint.c_str() << ". APM id: " << apm.id;
@@ -274,7 +278,7 @@ use this information and avoid needing to make a request to the User Information
         resp.body.clear();
         resp.compressed = false;
         resp.correlationId = correlationId( req );
-        resp.entity = model::JwtToken::EntityType();
+        resp.entity = model::OIDCInformation::EntityType();
         return resp;
     ]]>
     </code-block>
@@ -304,8 +308,7 @@ for the user.
     return write( boost::json::object{ { "code"sv, 404 }, { "cause"sv, "Not found"sv } } );
   }
 
-  const auto cleaned = boost::algorithm::replace_all_copy( *nonce, "_", "+" );
-  auto id = util::Configuration::instance().decrypt( cleaned );
+  auto id = util::Configuration::instance().decrypt( *nonce );
   auto oid = spt::util::parseId( id );
   if ( !oid )
   {
