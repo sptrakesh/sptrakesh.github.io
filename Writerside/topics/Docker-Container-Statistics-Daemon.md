@@ -93,7 +93,7 @@ cp <path to checked out source>/systemd/container-statsd.service ~/.config/syste
 systemctl --user daemon-reload
 systemctl --user enable container-statsd.service
 systemctl --user start container-statsd.service
-systemctl status container-statsd.service
+systemctl --user status container-statsd.service
 journalctl -f --user-unit container-statsd
 ```
 
