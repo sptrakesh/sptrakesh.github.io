@@ -4,6 +4,7 @@ Links to articles I wrote around interesting work I performed for my clients.
 
 <snippet id="article-links">
 <ul>
+  <li><a href="Microsoft-Entra-OAuth2.md">Microsoft Entra OAuth2</a></li>
   <li><a href="Google-Workspace-OAuth2.md">Google Workspace OAuth2</a></li>
   <li><a href="AWS-S3-Signed-PUT-URL.md">AWS S3 Signed PUT URL</a></li>
   <li><a href="Docker-Container-Statistics.md">Docker Container Statistics</a></li>
