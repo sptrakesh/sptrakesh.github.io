@@ -1,4 +1,5 @@
 # Docker Container Statistics
+<show-structure for="chapter,tab"/>
 
 We needed to get docker container statistics into a Grafana dashboard.  The
 easiest option was to get the statistics published periodically to a QuestDB

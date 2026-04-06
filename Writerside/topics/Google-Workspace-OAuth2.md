@@ -1,4 +1,5 @@
 # Google Workspace OAuth2
+<show-structure for="chapter,tab"/>
 
 These are the steps I followed to implement OAuth2 authentication against Google Workspace.
 

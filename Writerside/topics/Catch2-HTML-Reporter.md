@@ -1,4 +1,5 @@
 # Catch2 HTML Reporter
+<show-structure for="chapter,tab"/>
 
 A simple [Reporter](https://catch2-temp.readthedocs.io/en/latest/reporters.html) 
 implementation that generates **HTML** reports for test suites written

@@ -1,4 +1,5 @@
 # Microsoft Entra OAuth2
+<show-structure for="chapter,tab"/>
 
 We originally planned to use the OIDC protocol, however, our customer had not enabled
 OIDC, and hence we had to fall back to OAuth2.

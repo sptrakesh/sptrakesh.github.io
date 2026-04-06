@@ -1,4 +1,5 @@
 # AWS S3 Signed PUT URL
+<show-structure for="chapter,tab"/>
 
 A simple [utility](https://github.com/sptrakesh/s3-signed-put-url)
 to generate S3 signed PUT URL. The AWS CLI does not support generating
