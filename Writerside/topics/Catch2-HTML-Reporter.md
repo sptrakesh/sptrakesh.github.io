@@ -1,5 +1,5 @@
 # Catch2 HTML Reporter
-<show-structure for="chapter,tab"/>
+<show-structure for="chapter,tab" depth="2"/>
 
 A simple [Reporter](https://catch2-temp.readthedocs.io/en/latest/reporters.html) 
 implementation that generates **HTML** reports for test suites written
@@ -21,7 +21,13 @@ is done only after the test suite has completed.
 
 ### testRunStarting
 ```C++
-void testRunStarting( const Catch::TestRunInfo& info )
+    void testRunStarting( const Catch::TestRunInfo& info ) override
+    {
+      StreamingReporterBase::testRunStarting( info );
+      suites.reserve( 16 );
+      seed = Catch::getSeed();
+      start = std::chrono::high_resolution_clock::now();
+    }
 ```
 
 Populate the `seed` for the run (we do not use it at present), as well as start the clock
@@ -29,7 +35,13 @@ used to measure execution time.
 
 ### testCaseStarting
 ```C++
-void testCaseStarting( const Catch::TestCaseInfo& info )
+    void testCaseStarting( const Catch::TestCaseInfo& info ) override
+    {
+      StreamingReporterBase::testCaseStarting( info );
+      currentSection = nullptr;
+      suites.push_back( phr::create<phr::Suite>( info.name ) );
+      std::println( "\033[1;34m{}\033[0m", info.name );
+    }
 ```
 
 Add the suite to the vector of suites for this run.  Print the test case name to the console.
@@ -41,6 +53,23 @@ void sectionStarting( const Catch::SectionInfo& info )
 
 Add the section to the suite if not already added.  Keep a `pointer` to the section.
 This is used to track the nested hierarchy of sections in a test case.
+
+### assertionEnded
+```C++
+    void assertionEnded( const Catch::AssertionStats& stats ) override
+    {
+      if ( !stats.assertionResult.isOk() )
+      {
+        std::println( "\033[1;31mAssertion '{}' failed: {} at {}:{}\033[0m",
+          stats.assertionResult.getExpression(), stats.assertionResult.getMessage().data(),
+          stats.assertionResult.getSourceInfo().file, stats.assertionResult.getSourceInfo().line );
+      }
+    }
+```
+
+This over-ride is used to print assertion [failures](#catch2-html-reporter-example-failure) to the console.
+This level of detail is not appropriate in the HTML reports, and is
+not added to the output files.
 
 ### sectionEnded
 ```C++
@@ -291,6 +320,9 @@ for one of my test suites.
 <tabs id="catch2-html-reporter-examples">
   <tab title="Console Output Start" id="catch2-html-reporter-example-start">
     <img src="console-run-begin.png" alt="Console output begin" thumbnail="true"/>
+  </tab>
+  <tab title="Console Output Failure" id="catch2-html-reporter-example-failure">
+    <img src="console-run-failure.png" alt="Console output failure" thumbnail="true"/>
   </tab>
   <tab title="Console Output End" id="catch2-html-reporter-example-end">
     <img src="console-run-end.png" alt="Console output begin" thumbnail="true"/>
