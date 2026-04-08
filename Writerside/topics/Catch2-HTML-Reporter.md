@@ -27,6 +27,7 @@ is done only after the test suite has completed.
       suites.reserve( 16 );
       seed = Catch::getSeed();
       start = std::chrono::high_resolution_clock::now();
+      startTime = std::chrono::system_clock::now();
     }
 ```
 
@@ -149,6 +150,7 @@ You can view the full source code for the [reporter](https://gist.github.com/spt
       suites.reserve( 16 );
       seed = Catch::getSeed();
       start = std::chrono::high_resolution_clock::now();
+      startTime = std::chrono::system_clock::now();
     }
     ]]>
     </code-block>
@@ -306,7 +308,7 @@ You can view the full source code for the [reporter](https://gist.github.com/spt
         stats.totals.assertions.skipped, stats.totals.assertions.total() );
 
       std::println( "\033[1;34m  Duration - \033[0m\033[1m{} \033[0m\033[1;34mseconds\033[0m", std::chrono::duration_cast<std::chrono::duration<double>>( std::chrono::high_resolution_clock::now() - start ).count() );
-      phr::generate( suites, "test-results" );
+      phr::generate( suites, "test-results", startTime );
     }
     ]]>
     </code-block>
